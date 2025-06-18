@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UserDataService } from './service/user-data.service';
 import { FilmData } from './model/film-data';
-import { CommonModule } from '@angular/common';
+
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ButtonModule],
+  imports: [RouterOutlet, ButtonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

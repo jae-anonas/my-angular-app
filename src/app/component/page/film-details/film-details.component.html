@@ -1,0 +1,24 @@
+<div class="film-details-container" *ngIf="film">
+  <div class="film-details-card">
+    <div class="film-details-header">
+      <div class="film-details-title">{{ film.title }}</div>
+      <div class="film-details-meta">
+        <span>{{ film.release_year }}</span> •
+        <span>{{ film.rating }}</span> •
+        <span>{{ film.category_name }}</span>
+      </div>
+    </div>
+    <div class="film-details-body">
+      <div class="film-details-description">{{ film.description }}</div>
+      <div class="film-details-info">
+        <div><strong>Length:</strong> {{ film.length }} min</div>
+        <div><strong>Rental Rate:</strong> ${{ film.rental_rate }}</div>
+        <div><strong>Language ID:</strong> {{ film.language_id }}</div>
+        <div><strong>Special Features:</strong> {{ film.special_features }}</div>
+        <div><strong>Last Update:</strong> {{ film.last_update | date:'medium' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="loading" class="film-details-loading">Loading...</div>
+<div *ngIf="!film && !loading" class="film-details-error">Film not found.</div>

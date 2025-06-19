@@ -7,12 +7,13 @@
 <div class="film-list-container">
   <div class="film-cards">
     <div class="film-card" *ngFor="let film of films">
+      <a [routerLink]="['/film', film.film_id]" class="film-link-overlay" title="View Details"></a>
       <div class="film-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
         <span class="film-image-icon">🎬</span>
       </div>
       <div class="film-title-row">
         <div class="film-title">{{ film.title }}</div>
-        <button class="add-cart-btn" (click)="addToCart(film)" title="Add to Cart">
+        <button class="add-cart-btn" (click)="addToCart(film); $event.stopPropagation(); $event.preventDefault();" title="Add to Cart">
           <span>🛒</span>
         </button>
       </div>

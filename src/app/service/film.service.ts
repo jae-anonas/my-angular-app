@@ -26,4 +26,8 @@ export class FilmService {
     return this.http.post<FilmDataByCategoryResponse[]>(this.apiUrl + 'by-categories', {categories: categories, limit: 13});
     // return this.http.get<{ name: string; films: FilmData[] }[]>(this.apiUrl + 'by-category');
   }
+
+  getFilmById(id: string) {
+    return this.http.get<any>(this.apiUrl + 'by-id', { params: { id } });
+  }
 }

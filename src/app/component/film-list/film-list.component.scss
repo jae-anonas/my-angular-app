@@ -76,6 +76,8 @@
   cursor: pointer;
   transition: background 0.2s;
   box-shadow: 0 2px 8px 0 rgba(161, 167, 255, 0.10);
+  z-index: 3;
+  position: relative;
 }
 
 .add-cart-btn:hover {
@@ -124,4 +126,13 @@
 .pagination .page-link:disabled {
   background: #393e5c;
   color: #888;
+}
+
+.film-link-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
 }

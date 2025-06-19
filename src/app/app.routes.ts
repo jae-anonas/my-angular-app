@@ -8,6 +8,7 @@ import { ProfileComponent } from './component/page/profile/profile.component';
 import { CartComponent } from './component/page/cart/cart.component';
 import { HomeComponent } from './component/page/home/home.component';
 import { AuthGuard } from './service/auth.guard';
+import { FilmDetailsComponent } from './component/page/film-details/film-details.component';
 
 export const routes: Routes = [
     {
@@ -47,6 +48,10 @@ export const routes: Routes = [
             {
                 path: 'cart',
                 component: CartComponent
+            },
+            {
+                path: 'film/:id',
+                component: FilmDetailsComponent
             }
         ]
     }

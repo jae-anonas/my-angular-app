@@ -4,11 +4,12 @@ import { FilmData, FilmDataResponse } from '../../model/film-data';
 import { FilmService } from '../../service/film.service';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../service/cart.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-film-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './film-list.component.html',
   styleUrl: './film-list.component.scss'
 })

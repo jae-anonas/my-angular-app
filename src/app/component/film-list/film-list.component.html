@@ -33,8 +33,20 @@
       <li class="page-item" [class.disabled]="page === 1">
         <button class="page-link" (click)="setPage(page - 1)" [disabled]="page === 1">Previous</button>
       </li>
-      <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="page === i + 1">
-        <button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button>
+      <li class="page-item" *ngIf="page > 3">
+        <button class="page-link" (click)="setPage(1)">1</button>
+      </li>
+      <li class="page-item disabled" *ngIf="page > 4">
+        <span class="page-link">...</span>
+      </li>
+      <li class="page-item" *ngFor="let p of getVisiblePages()" [class.active]="page === p">
+        <button class="page-link" (click)="setPage(p)">{{ p }}</button>
+      </li>
+      <li class="page-item disabled" *ngIf="page < totalPages - 3">
+        <span class="page-link">...</span>
+      </li>
+      <li class="page-item" *ngIf="page < totalPages - 2">
+        <button class="page-link" (click)="setPage(totalPages)">{{ totalPages }}</button>
       </li>
       <li class="page-item" [class.disabled]="page === totalPages">
         <button class="page-link" (click)="setPage(page + 1)" [disabled]="page === totalPages">Next</button>

@@ -73,4 +73,14 @@ export class FilmListComponent implements OnInit {
   addToCart(film: FilmData) {
     this.cartService.addToCart(film);
   }
+
+  getVisiblePages(): number[] {
+    const pages: number[] = [];
+    const start = Math.max(1, this.page - 2);
+    const end = Math.min(this.totalPages, this.page + 2);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
 }

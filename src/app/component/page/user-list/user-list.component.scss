@@ -52,3 +52,12 @@
 .user-list-table tr:hover {
   background: #2d325a;
 }
+
+.user-list-row.clickable-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.user-list-row.clickable-row:hover {
+  background: #2d325a !important;
+}

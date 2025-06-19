@@ -5,9 +5,15 @@
     </div>
     <div class="profile-title">User Profile</div>
     <div class="profile-details">
-      <div><strong>Username:</strong> {{ user?.username || 'N/A' }}</div>
+      <div><strong>Username:</strong> {{ user?.username || user?.name || 'N/A' }}</div>
       <div *ngIf="user?.email"><strong>Email:</strong> {{ user.email }}</div>
+      <div *ngIf="user?.first_name"><strong>First Name:</strong> {{ user.first_name }}</div>
+      <div *ngIf="user?.last_name"><strong>Last Name:</strong> {{ user.last_name }}</div>
+      <div *ngIf="user?.role"><strong>Role:</strong> {{ user.role }}</div>
+      <div *ngIf="user?.created_at"><strong>Created At:</strong> {{ user.created_at | date:'medium' }}</div>
+      <div *ngIf="user?.updated_at"><strong>Updated At:</strong> {{ user.updated_at | date:'medium' }}</div>
       <div *ngIf="user?.token"><strong>Token:</strong> {{ user.token }}</div>
+      <div *ngIf="user?.id"><strong>ID:</strong> {{ user.id }}</div>
     </div>
   </div>
 </div>

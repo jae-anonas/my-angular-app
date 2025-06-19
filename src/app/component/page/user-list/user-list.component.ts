@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { UserService, User } from '../../../service/user.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class UserListComponent implements OnInit {
   users: User[] = [];
   loading = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.loading = true;
@@ -27,5 +28,9 @@ export class UserListComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  goToProfile(user: User) {
+    this.router.navigate(['/profile/' + user.id]);
   }
 }

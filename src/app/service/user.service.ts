@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
+  id: number;
   name: string;
   email: string;
   first_name: string;
@@ -20,5 +21,9 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
+  }
+
+  getUserById(id: string) {
+    return this.http.get<any>('http://localhost:3000/users/by-id', { params: { id } });
   }
 }

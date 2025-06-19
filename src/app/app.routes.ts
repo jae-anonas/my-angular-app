@@ -39,7 +39,7 @@ export const routes: Routes = [
                 component: CreateUserComponent
             },
             {
-                path: 'profile',
+                path: 'profile/:id',
                 component: ProfileComponent
             },
             {

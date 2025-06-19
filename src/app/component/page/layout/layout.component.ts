@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService } from '../../../service/cart.service';
+import { AuthService } from '../../../service/auth-service.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,6 +12,8 @@ import { CartService } from '../../../service/cart.service';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
+  private authService = inject(AuthService);
+
   showDropdown = false;
   cartCount = 0;
 
@@ -18,9 +21,12 @@ export class LayoutComponent {
     this.cartService.cart$.subscribe(items => this.cartCount = items.length);
   }
 
+
   onProfile() {
+    const userData = localStorage.getItem('userData');
+    debugger;
     // Navigate to profile page or show profile modal
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/profile/' + (userData ? JSON.parse(userData).id : '')]);
   }
 
   onLogout() {

@@ -23,7 +23,7 @@ export class FilmService {
 
   getFilmsByCategory(categories: string[]): Observable<FilmDataByCategoryResponse[]> {
     // This should call your backend, but here is a mock for demo purposes
-    return this.http.post<FilmDataByCategoryResponse[]>(this.apiUrl + 'by-categories', {categories: categories, limit: 3});
+    return this.http.post<FilmDataByCategoryResponse[]>(this.apiUrl + 'by-categories', {categories: categories, limit: 13});
     // return this.http.get<{ name: string; films: FilmData[] }[]>(this.apiUrl + 'by-category');
   }
 }

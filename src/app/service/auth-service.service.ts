@@ -15,7 +15,7 @@ export class AuthService {
     private router: Router,
     private http: HttpClient
   ) {
-    let userStorage: any = localStorage.getItem('user');
+    let userStorage: any = localStorage.getItem('userData');
     this.userSubject = new BehaviorSubject<any>(JSON.parse(userStorage));
     this.user = this.userSubject.asObservable();
   }

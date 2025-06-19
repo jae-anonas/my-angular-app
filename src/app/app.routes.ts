@@ -7,6 +7,7 @@ import { FilmListComponent } from './component/film-list/film-list.component';
 import { ProfileComponent } from './component/page/profile/profile.component';
 import { CartComponent } from './component/page/cart/cart.component';
 import { HomeComponent } from './component/page/home/home.component';
+import { AuthGuard } from './service/auth.guard';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,7 @@ export const routes: Routes = [
     {
         path: '',
         component: LayoutComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'home',

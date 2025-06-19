@@ -23,12 +23,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('id');
     
-    debugger;
     if (userId) {
       this.loading = true;
       this.userService.getUserById(userId).subscribe({
         next: (response) => {
-          debugger;
           this.user = response.user;
           this.loading = false;
         },

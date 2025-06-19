@@ -24,7 +24,6 @@ export class LayoutComponent {
 
   onProfile() {
     const userData = localStorage.getItem('userData');
-    debugger;
     // Navigate to profile page or show profile modal
     this.router.navigate(['/profile/' + (userData ? JSON.parse(userData).id : '')]);
   }

@@ -1,0 +1,32 @@
+<div class="create-user-container">
+  <div class="card create-user-card">
+    <div class="create-user-logo">
+      <span>👤</span>
+    </div>
+    <div class="create-user-title">Create Account</div>
+    <div class="create-user-subtitle">Fill in the details below to create your account.</div>
+    <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Username</label>
+        <input type="text" id="name" class="form-control" formControlName="name" placeholder="Enter a username">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" class="form-control" formControlName="email" placeholder="Enter your email">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" formControlName="password" placeholder="Create a password">
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" placeholder="Confirm your password">
+      </div>
+      <div class="create-user-actions">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">Create Account</button>
+        <button type="button" class="btn btn-outline-light w-100" (click)="onBackToLogin()">Back to Login</button>
+      </div>
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    </form>
+  </div>
+</div>

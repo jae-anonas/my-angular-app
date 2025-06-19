@@ -1,0 +1,54 @@
+.user-list-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 0 2rem 0;
+}
+
+.user-list-loading {
+  color: #a1a7ff;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.user-list-empty {
+  color: #b0b8c1;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #232946;
+  color: #eaeaea;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px 0 rgba(20, 20, 40, 0.13);
+}
+
+.user-list-table th, .user-list-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+.user-list-table th {
+  background: #181c2f;
+  color: #a1a7ff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.user-list-table tr:nth-child(even) {
+  background: #232946;
+}
+
+.user-list-table tr:nth-child(odd) {
+  background: #20233a;
+}
+
+.user-list-table tr:hover {
+  background: #2d325a;
+}

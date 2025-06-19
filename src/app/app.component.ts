@@ -18,19 +18,8 @@ export class AppComponent {
 
   public films: FilmData[] = [];
 
-  constructor(private userDataService: UserDataService) {
-    this.getFilmList();
-  }
+  constructor(private userDataService: UserDataService) { }
 
-  getFilmList() {
-    // This method can be used to trigger any logic related to film list retrieval
-    this.userDataService.getUserData().subscribe((data: FilmData[]) => {
-      this.films = data;
-      console.log('Film list retrieved:', this.films);
-    }, (error: any) => {
-      console.error('Error retrieving film list:', error);
-    });
-  }
 }
 
 

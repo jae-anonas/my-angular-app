@@ -1,0 +1,19 @@
+<div class="home-container">
+  <div *ngIf="loading" class="home-loading">Loading films...</div>
+  <ng-container *ngIf="!loading">
+    <div *ngFor="let category of categories" class="category-section">
+      <div class="category-title">{{ category.category }}</div>
+      <div class="film-carousel">
+        <div class="film-carousel-track">
+          <div class="film-carousel-card" *ngFor="let film of category.films">
+            <div class="film-carousel-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
+              <span class="film-carousel-icon">🎬</span>
+            </div>
+            <div class="film-carousel-title">{{ film.title }}</div>
+            <div class="film-carousel-meta">{{ film.release_year }} • {{ film.rating }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

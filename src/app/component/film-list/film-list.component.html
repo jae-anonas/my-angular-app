@@ -1,0 +1,44 @@
+<div class="film-list-search mb-4">
+  <form (ngSubmit)="onSearch()" class="d-flex align-items-center gap-2">
+    <input type="text" class="form-control" placeholder="Search films..." [(ngModel)]="searchTerm" name="searchTerm">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div>
+<div class="film-list-container">
+  <div class="film-cards">
+    <div class="film-card" *ngFor="let film of paginatedFilms">
+      <div class="film-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
+        <span class="film-image-icon">🎬</span>
+      </div>
+      <div class="film-title-row">
+        <div class="film-title">{{ film.title }}</div>
+        <button class="add-cart-btn" (click)="addToCart(film)" title="Add to Cart">
+          <span>🛒</span>
+        </button>
+      </div>
+      <div class="film-meta">
+        <span>{{ film.release_year }}</span> •
+        <span>{{ film.rating }}</span> •
+        <span>{{ film.category_name }}</span>
+      </div>
+      <div class="film-description">{{ film.description }}</div>
+      <div class="film-details">
+        <span>Length: {{ film.length }} min</span>
+        <span>Rental: ${{ film.rental_rate }}</span>
+      </div>
+    </div>
+  </div>
+  <nav class="pagination-nav" *ngIf="totalPages > 1">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="page === 1">
+        <button class="page-link" (click)="setPage(page - 1)" [disabled]="page === 1">Previous</button>
+      </li>
+      <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="page === i + 1">
+        <button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button>
+      </li>
+      <li class="page-item" [class.disabled]="page === totalPages">
+        <button class="page-link" (click)="setPage(page + 1)" [disabled]="page === totalPages">Next</button>
+      </li>
+    </ul>
+  </nav>
+</div>

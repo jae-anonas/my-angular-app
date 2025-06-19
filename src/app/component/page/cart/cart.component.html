@@ -1,0 +1,19 @@
+<div class="cart-container">
+  <div class="cart-card">
+    <div class="cart-title">Your Cart</div>
+    <div *ngIf="cart.length === 0" class="cart-empty">Your cart is empty.</div>
+    <ul class="cart-list" *ngIf="cart.length > 0">
+      <li *ngFor="let film of cart" class="cart-item">
+        <div class="cart-film-info">
+          <span class="cart-film-title">{{ film.title }}</span>
+          <span class="cart-film-meta">{{ film.release_year }} • {{ film.rating }} • {{ film.category_name }}</span>
+          <span class="cart-film-details">Length: {{ film.length }} min | Rental: ${{ film.rental_rate }}</span>
+        </div>
+        <button class="remove-btn" (click)="removeFromCart(film.film_id)" title="Remove">✖️</button>
+      </li>
+    </ul>
+    <div *ngIf="cart.length > 0" class="cart-actions">
+      <button class="btn btn-danger" (click)="clearCart()">Clear Cart</button>
+    </div>
+  </div>
+</div>

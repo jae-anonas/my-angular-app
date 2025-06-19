@@ -1,0 +1,28 @@
+<div class="login-container">
+  <div class="card login-card">
+    <div class="login-logo">
+      <span>🔒</span>
+    </div>
+    <div class="login-title">Sign In</div>
+    <div class="login-subtitle">Welcome back! Please enter your credentials to continue.</div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" class="form-control" formControlName="username" placeholder="Enter your username">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" formControlName="password" placeholder="Enter your password">
+      </div>
+      <div class="login-links">
+        <a href="#" (click)="$event.preventDefault(); onForgotPassword()">Forgot password?</a>
+        <a href="#" (click)="$event.preventDefault(); onHelp()">Need help?</a>
+      </div>
+      <div class="login-actions">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">Login</button>
+        <button type="button" class="btn btn-outline-light w-100" (click)="onNewUser()">New User</button>
+      </div>
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    </form>
+  </div>
+</div>

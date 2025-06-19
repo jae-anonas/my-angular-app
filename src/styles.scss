@@ -1,1 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 /* You can add global styles to this file, and also import other style files */
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  font-size: 1rem;
+  color: #eaeaea;
+  background: #181c2f;
+  margin: 0;
+  border: none;
+  min-height: 100vh;
+}
+
+html {
+  background: #181c2f;
+  border: none;
+}

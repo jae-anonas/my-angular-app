@@ -1,0 +1,127 @@
+.film-list-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.film-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.2rem;
+}
+
+.film-card {
+  background: #232946;
+  color: #eaeaea;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px 0 rgba(20, 20, 40, 0.18);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 320px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.film-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(161, 167, 255, 0.18);
+  transform: translateY(-4px) scale(1.025);
+}
+
+.film-image {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.7rem;
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(161, 167, 255, 0.10);
+  overflow: hidden;
+}
+
+.film-image-icon {
+  opacity: 0.85;
+}
+
+.film-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.film-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #a1a7ff;
+  flex: 1;
+  word-break: break-word;
+}
+
+.add-cart-btn {
+  background: #a1a7ff;
+  color: #232946;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(161, 167, 255, 0.10);
+}
+
+.add-cart-btn:hover {
+  background: #bfcaff;
+}
+
+.film-meta {
+  font-size: 0.98rem;
+  color: #b0b8c1;
+  margin-bottom: 0.2rem;
+}
+
+.film-description {
+  font-size: 1rem;
+  color: #eaeaea;
+  margin-bottom: 0.5rem;
+  min-height: 48px;
+}
+
+.film-details {
+  font-size: 0.97rem;
+  color: #b0b8c1;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.pagination-nav {
+  margin-top: 2rem;
+}
+
+.pagination .page-link {
+  background: #232946;
+  color: #a1a7ff;
+  border: none;
+  border-radius: 6px;
+  margin: 0 0.2rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: #a1a7ff;
+  color: #232946;
+}
+
+.pagination .page-link:disabled {
+  background: #393e5c;
+  color: #888;
+}

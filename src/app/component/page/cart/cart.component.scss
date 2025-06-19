@@ -1,0 +1,106 @@
+.cart-container {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart-card {
+  background: #232946;
+  color: #eaeaea;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px 0 rgba(20, 20, 40, 0.18);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cart-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: #a1a7ff;
+}
+
+.cart-empty {
+  color: #b0b8c1;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  width: 100%;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #393e5c;
+  gap: 1rem;
+}
+
+.cart-film-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.cart-film-title {
+  font-size: 1.1rem;
+  color: #eaeaea;
+  font-weight: 600;
+}
+
+.cart-film-meta {
+  font-size: 0.97rem;
+  color: #a1a7ff;
+}
+
+.cart-film-details {
+  font-size: 0.95rem;
+  color: #b0b8c1;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #ffb4b4;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-left: 0.5rem;
+}
+
+.remove-btn:hover {
+  color: #ff4d4d;
+}
+
+.cart-actions {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-danger {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover {
+  background: #ff1a1a;
+}

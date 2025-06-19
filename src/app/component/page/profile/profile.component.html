@@ -1,0 +1,13 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-avatar">
+      <span>👤</span>
+    </div>
+    <div class="profile-title">User Profile</div>
+    <div class="profile-details">
+      <div><strong>Username:</strong> {{ user?.username || 'N/A' }}</div>
+      <div *ngIf="user?.email"><strong>Email:</strong> {{ user.email }}</div>
+      <div *ngIf="user?.token"><strong>Token:</strong> {{ user.token }}</div>
+    </div>
+  </div>
+</div>

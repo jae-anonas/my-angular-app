@@ -1,0 +1,28 @@
+<div class="user-list-container">
+  <div *ngIf="loading" class="user-list-loading">Loading users...</div>
+  <table *ngIf="!loading && users.length > 0" class="user-list-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Role</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.role }}</td>
+        <td>{{ user.created_at | date:'medium' }}</td>
+        <td>{{ user.updated_at | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!loading && users.length === 0" class="user-list-empty">No users found.</div>
+</div>

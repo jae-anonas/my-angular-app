@@ -16,3 +16,39 @@ html {
   background: #181c2f;
   border: none;
 }
+
+// Toast styles for MessageService
+.custom-toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.custom-toast {
+  min-width: 180px;
+  max-width: 320px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  box-shadow: 0 2px 12px 0 rgba(20, 20, 40, 0.18);
+  opacity: 0.97;
+  transition: opacity 0.5s;
+}
+.custom-toast-success {
+  background: #4caf50;
+}
+.custom-toast-error {
+  background: #e53935;
+}
+.custom-toast-info {
+  background: #232946;
+  border: 1px solid #a1a7ff;
+}
+.custom-toast.fade-out {
+  opacity: 0;
+}

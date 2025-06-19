@@ -47,3 +47,49 @@
   gap: 0.7rem;
   align-items: flex-start;
 }
+
+.profile-details input.form-control-sm, .profile-details select.form-select-sm {
+  background: #16161a;
+  color: #eaeaea;
+  border: 1px solid #444;
+  border-radius: 6px;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.profile-details input.form-control-sm:focus, .profile-details select.form-select-sm:focus {
+  background: #232946;
+  color: #fff;
+  border-color: #a1a7ff;
+  outline: none;
+  box-shadow: 0 0 0 2px #a1a7ff33;
+}
+
+.profile-details .btn {
+  min-width: 80px;
+}
+
+.profile-details .btn-primary {
+  background: #a1a7ff;
+  border: none;
+  color: #232946;
+  font-weight: 600;
+}
+
+.profile-details .btn-primary:hover {
+  background: #6c70d6;
+  color: #fff;
+}
+
+.profile-details .btn-secondary {
+  background: #393e5c;
+  border: none;
+  color: #eaeaea;
+}
+
+.profile-details .btn-secondary:hover {
+  background: #232946;
+  color: #a1a7ff;
+}

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth-service.service';
+import { MessageService } from '../../../service/message.service';
 
 @Component({
   selector: 'app-create-user',
@@ -15,6 +16,7 @@ export class CreateUserComponent implements OnInit {
   createUserForm!: FormGroup;
   loading = false;
   error = '';
+  messageService = inject(MessageService);
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
 
@@ -44,6 +46,7 @@ export class CreateUserComponent implements OnInit {
     this.authService.createUser(this.createUserForm.value).subscribe({
       next: () => { 
         this.loading = false;
+        this.messageService.show('User created!', 'success');
         this.router.navigate(['/login']);
       }
     });

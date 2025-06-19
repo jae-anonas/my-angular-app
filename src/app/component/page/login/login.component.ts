@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../service/auth-service.service';
+import { MessageService } from '../../../service/message.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl!: string;
   submitted = false;
+  messageService = inject(MessageService);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,9 +48,11 @@ export class LoginComponent implements OnInit {
           this.loading = false;
           // Store user data in local storage
           localStorage.setItem('userData', JSON.stringify(response.userData));
+          this.messageService.show('Successfully logged in!', 'success');
           this.router.navigate(['/films']);
         }, error: (err: any) => {
           this.error = 'Login failed';
+          this.messageService.show('Login Failed', 'error');
           this.loading = false;
         }
       });
@@ -60,12 +64,10 @@ export class LoginComponent implements OnInit {
   }
 
   onForgotPassword() {
-    // Implement forgot password logic or navigation
-    alert('Forgot password functionality coming soon!');
+    this.messageService.show('Forgot password functionality coming soon!', 'info');
   }
 
   onHelp() {
-    // Implement help logic or navigation
-    alert('Help functionality coming soon!');
+    this.messageService.show('Help functionality coming soon!', 'info');
   }
 }

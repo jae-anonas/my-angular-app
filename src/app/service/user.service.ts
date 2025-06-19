@@ -26,4 +26,9 @@ export class UserService {
   getUserById(id: string) {
     return this.http.get<any>('http://localhost:3000/users/by-id', { params: { id } });
   }
+
+  saveUserEdits(user: Partial<User>) {
+    // Expects user object with id and fields to update
+    return this.http.put<any>('http://localhost:3000/users/edit', user);
+  }
 }

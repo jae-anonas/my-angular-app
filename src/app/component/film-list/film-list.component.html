@@ -6,7 +6,7 @@
 </div>
 <div class="film-list-container">
   <div class="film-cards">
-    <div class="film-card" *ngFor="let film of paginatedFilms">
+    <div class="film-card" *ngFor="let film of films">
       <div class="film-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
         <span class="film-image-icon">🎬</span>
       </div>

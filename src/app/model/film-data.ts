@@ -22,7 +22,8 @@ export class FilmDataResponse {
   constructor(
     public page: number,
     public pageSize: string,
-    public films: FilmData[]
+    public films: FilmData[],
+    public total: number // total number of films for pagination
   ) {}
 }
 

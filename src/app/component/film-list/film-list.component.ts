@@ -45,7 +45,7 @@ export class FilmListComponent implements OnInit {
       next: (res: FilmDataResponse) => {
         this.films = res.films;
         this.page = res.page;
-        this.totalPages = Math.ceil(res.films.length / Number(res.pageSize));
+        this.totalPages = Math.ceil(res.total / this.pageSize);
         this.loading = false;
       },
       error: () => {
@@ -55,25 +55,22 @@ export class FilmListComponent implements OnInit {
     });
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.page = page;
+    this.loadFilms(this.page, this.searchTerm);
+  }
+
   onSearch() {
     this.page = 1;
     this.loadFilms(this.page, this.searchTerm);
   }
 
-  get paginatedFilms(): FilmData[] {
-    return this.films;
-  }
-
-  setPage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.loadFilms(page, this.searchTerm);
+  getRandomGradient(id: number): string {
+    return this.gradients[id % this.gradients.length];
   }
 
   addToCart(film: FilmData) {
     this.cartService.addToCart(film);
-  }
-
-  getRandomGradient(id: number): string {
-    return this.gradients[id % this.gradients.length];
   }
 }

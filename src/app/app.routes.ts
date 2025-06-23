@@ -9,6 +9,7 @@ import { CartComponent } from './component/page/cart/cart.component';
 import { HomeComponent } from './component/page/home/home.component';
 import { AuthGuard } from './service/auth.guard';
 import { FilmDetailsComponent } from './component/page/film-details/film-details.component';
+import { InventoryComponent } from './component/page/inventory/inventory.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +53,10 @@ export const routes: Routes = [
             {
                 path: 'film/:id',
                 component: FilmDetailsComponent
+            },
+            {
+                path: 'inventory',
+                component: InventoryComponent
             }
         ]
     }

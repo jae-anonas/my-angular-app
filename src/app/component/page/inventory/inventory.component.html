@@ -1,0 +1,21 @@
+<div class="inventory-container">
+  <h2>Film Inventory</h2>
+  <table class="inventory-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Year</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let film of films">
+        <td>{{ film.title }}</td>
+        <td>{{ film.category_name }}</td>
+        <td>{{ film.release_year }}</td>
+        <td>{{ film.rating }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

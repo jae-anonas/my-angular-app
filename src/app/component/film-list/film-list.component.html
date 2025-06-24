@@ -20,7 +20,8 @@
       <div class="film-meta">
         <span>{{ film.release_year }}</span> •
         <span>{{ film.rating }}</span> •
-        <span>{{ film.categories[0].name }}</span>
+        <span *ngIf="film.categories?.length; else noCategories">{{ film.categories[0].name }}</span>
+        <ng-template #noCategories><span class="no-categories">No categories</span></ng-template>
       </div>
       <div class="film-description">{{ film.description }}</div>
       <div class="film-details">

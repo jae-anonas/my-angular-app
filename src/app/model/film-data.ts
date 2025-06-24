@@ -5,6 +5,7 @@ export class FilmData {
     public description: string,
     public release_year: number,
     public language_id: number,
+    public language: string,
     public original_language_id: any,
     public rental_duration: number,
     public rental_rate: string,

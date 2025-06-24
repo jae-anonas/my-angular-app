@@ -1,0 +1,48 @@
+<div class="add-film-container">
+  <h2>Add New Film</h2>
+  <form (ngSubmit)="onSubmit()" #filmForm="ngForm">
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" name="title" [(ngModel)]="film.title" required />
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" [(ngModel)]="film.description" required></textarea>
+    </div>
+    <div class="form-group">
+      <label>Release Year</label>
+      <input type="number" name="release_year" [(ngModel)]="film.release_year" required />
+    </div>
+    <div class="form-group">
+      <label>Language ID</label>
+      <input type="number" name="language_id" [(ngModel)]="film.language_id" required />
+    </div>
+    <div class="form-group">
+      <label>Rental Duration</label>
+      <input type="number" name="rental_duration" [(ngModel)]="film.rental_duration" required />
+    </div>
+    <div class="form-group">
+      <label>Rental Rate</label>
+      <input type="number" name="rental_rate" [(ngModel)]="film.rental_rate" required />
+    </div>
+    <div class="form-group">
+      <label>Replacement Cost</label>
+      <input type="number" name="replacement_cost" [(ngModel)]="film.replacement_cost" required />
+    </div>
+    <div class="form-group">
+      <label>Rating</label>
+      <input type="text" name="rating" [(ngModel)]="film.rating" required />
+    </div>
+    <div class="form-group">
+      <label>Categories (comma separated)</label>
+      <input type="text" name="categories" [(ngModel)]="categoriesInput" placeholder="e.g. Action, Comedy" />
+    </div>
+    <div class="form-group">
+      <label>Length</label>
+      <input type="number" name="length" [(ngModel)]="film.length" required />
+    </div>
+    <button type="submit" [disabled]="filmForm.invalid">Add Film</button>
+    <div *ngIf="success" class="success-message">Film added successfully!</div>
+    <div *ngIf="error" class="error-message">Error: {{ error }}</div>
+  </form>
+</div>

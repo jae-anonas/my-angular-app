@@ -30,4 +30,8 @@ export class FilmService {
   getFilmById(id: string) {
     return this.http.get<any>(this.apiUrl + 'by-id', { params: { id } });
   }
+
+  createFilm(film: any) {
+    return this.http.post(this.apiUrl + 'create', film);
+  }
 }

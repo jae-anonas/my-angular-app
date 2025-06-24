@@ -1,21 +1,27 @@
 <div class="film-details-container" *ngIf="film">
-  <div class="film-details-card">
+  <div class="film-details-card enhanced">
     <div class="film-details-header">
       <div class="film-details-title">{{ film.title }}</div>
       <div class="film-details-meta">
-        <span>{{ film.release_year }}</span> •
-        <span>{{ film.rating }}</span> •
-        <span>{{ film.categories[0].name }}</span>
+        <span class="meta-year">{{ film.release_year }}</span>
+        <span class="meta-dot">•</span>
+        <span class="meta-rating">{{ film.rating }}</span>
+        <span class="meta-dot">•</span>
+        <span class="meta-categories">
+          <ng-container *ngFor="let cat of film.categories; let last = last">
+            {{ cat.name }}<span *ngIf="!last">, </span>
+          </ng-container>
+        </span>
       </div>
     </div>
     <div class="film-details-body">
       <div class="film-details-description">{{ film.description }}</div>
-      <div class="film-details-info">
-        <div><strong>Length:</strong> {{ film.length }} min</div>
-        <div><strong>Rental Rate:</strong> ${{ film.rental_rate }}</div>
-        <div><strong>Language:</strong> {{ film.language }}</div>
-        <div><strong>Special Features:</strong> {{ film.special_features }}</div>
-        <div><strong>Last Update:</strong> {{ film.last_update | date:'medium' }}</div>
+      <div class="film-details-info-grid">
+        <div><strong>Length:</strong> <span>{{ film.length }} min</span></div>
+        <div><strong>Rental Rate:</strong> <span>${{ film.rental_rate }}</span></div>
+        <div><strong>Language:</strong> <span>{{ film.language }}</span></div>
+        <div><strong>Special Features:</strong> <span>{{ film.special_features }}</span></div>
+        <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
       </div>
     </div>
   </div>

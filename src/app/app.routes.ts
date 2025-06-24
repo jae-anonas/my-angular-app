@@ -10,6 +10,7 @@ import { HomeComponent } from './component/page/home/home.component';
 import { AuthGuard } from './service/auth.guard';
 import { FilmDetailsComponent } from './component/page/film-details/film-details.component';
 import { InventoryComponent } from './component/page/inventory/inventory.component';
+import { AddFilmComponent } from './component/page/add-film/add-film.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,10 @@ export const routes: Routes = [
             {
                 path: 'inventory',
                 component: InventoryComponent
+            },
+            {
+                path: 'add-film',
+                component: AddFilmComponent
             }
         ]
     }

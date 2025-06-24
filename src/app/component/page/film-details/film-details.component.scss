@@ -18,6 +18,20 @@
   gap: 1.2rem;
 }
 
+.film-details-card.enhanced {
+  background: linear-gradient(135deg, #232946 80%, #393e5c 100%);
+  color: #eaeaea;
+  border-radius: 22px;
+  box-shadow: 0 6px 24px 0 rgba(20, 20, 40, 0.22);
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  min-width: 340px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: box-shadow 0.2s;
+}
+
 .film-details-header {
   border-bottom: 1px solid #393e5c;
   padding-bottom: 1rem;
@@ -29,10 +43,31 @@
   color: #a1a7ff;
 }
 
+.film-details-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #ffe066;
+  letter-spacing: 0.5px;
+}
+
 .film-details-meta {
   font-size: 1.1rem;
   color: #a1a7ff;
   margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.meta-dot {
+  color: #ffe066;
+  font-size: 1.2em;
+  margin: 0 0.2em;
+}
+
+.meta-categories {
+  color: #ffadad;
+  font-weight: 500;
 }
 
 .film-details-body {
@@ -44,13 +79,32 @@
   margin-bottom: 1rem;
 }
 
+.film-details-description {
+  font-size: 1.13rem;
+  margin-bottom: 1.1rem;
+  color: #eaeaea;
+  line-height: 1.6;
+}
+
 .film-details-info > div {
   margin-bottom: 0.5rem;
 }
 
+.film-details-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem 1.2rem;
+  font-size: 1.01rem;
+}
+
+.film-details-info-grid div strong {
+  color: #ffe066;
+  font-weight: 600;
+}
+
 .film-details-loading, .film-details-error {
   text-align: center;
-  color: #e53935;
-  font-size: 1.2rem;
   margin-top: 2rem;
+  color: #a1a7ff;
+  font-size: 1.2rem;
 }

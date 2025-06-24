@@ -6,7 +6,7 @@
       <li *ngFor="let film of cart" class="cart-item">
         <div class="cart-film-info">
           <span class="cart-film-title">{{ film.title }}</span>
-          <span class="cart-film-meta">{{ film.release_year }} • {{ film.rating }} • {{ film.category_name }}</span>
+          <span class="cart-film-meta">{{ film.release_year }} • {{ film.rating }} • {{ film.categories[0].name }}</span>
           <span class="cart-film-details">Length: {{ film.length }} min | Rental: ${{ film.rental_rate }}</span>
         </div>
         <button class="remove-btn" (click)="removeFromCart(film.film_id)" title="Remove">✖️</button>

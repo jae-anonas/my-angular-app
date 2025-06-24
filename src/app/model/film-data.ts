@@ -13,8 +13,7 @@ export class FilmData {
     public rating: string,
     public special_features: string,
     public last_update: string,
-    public category_id: number,
-    public category_name: string
+    public categories: Category[]
   ) {}
 }
 
@@ -31,5 +30,12 @@ export class FilmDataByCategoryResponse {
   constructor(
     public category: string,
     public films: FilmData[]
+  ) {}
+}
+
+export class Category {
+  constructor(
+    public category_id: number,
+    public name: string
   ) {}
 }

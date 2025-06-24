@@ -12,7 +12,7 @@
     <tbody>
       <tr *ngFor="let film of films">
         <td>{{ film.title }}</td>
-        <td>{{ film.category_name }}</td>
+        <td>{{ film.categories[0].name }}</td>
         <td>{{ film.release_year }}</td>
         <td>{{ film.rating }}</td>
       </tr>

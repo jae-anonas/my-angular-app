@@ -1,35 +1,24 @@
 .film-details-container {
   min-height: 80vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
-.film-details-card {
+.film-details-card, .film-details-card.enhanced {
   background: #232946;
   color: #eaeaea;
-  border-radius: 18px;
-  box-shadow: 0 4px 16px 0 rgba(20, 20, 40, 0.18);
-  padding: 2.5rem 2rem 2rem 2rem;
-  min-width: 340px;
-  max-width: 520px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px 0 rgba(20, 20, 40, 0.15);
+  padding: 2.2rem 1.7rem 1.7rem 1.7rem;
+  min-width: 320px;
+  max-width: 540px;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-}
-
-.film-details-card.enhanced {
-  background: linear-gradient(135deg, #232946 80%, #393e5c 100%);
-  color: #eaeaea;
-  border-radius: 22px;
-  box-shadow: 0 6px 24px 0 rgba(20, 20, 40, 0.22);
-  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
-  min-width: 340px;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  transition: box-shadow 0.2s;
+  gap: 1.1rem;
+  position: relative;
 }
 
 .film-details-header {
@@ -37,32 +26,26 @@
   padding-bottom: 1rem;
 }
 
-.film-details-title {
+.film-details-title, .film-details-title-input {
   font-size: 1.7rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #a1a7ff;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #393e5c;
+  outline: none;
+  width: 100%;
+  margin-bottom: 0.3rem;
 }
 
-.film-details-title {
-  font-size: 2.1rem;
-  font-weight: 800;
-  color: #ffe066;
-  letter-spacing: 0.5px;
-}
-
-.film-details-meta {
-  font-size: 1.1rem;
+.film-details-meta, .meta-year, .meta-rating, .meta-dot, .meta-categories {
   color: #a1a7ff;
-  margin-top: 0.3rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 400;
 }
 
 .meta-dot {
-  color: #ffe066;
-  font-size: 1.2em;
-  margin: 0 0.2em;
+  color: #393e5c;
 }
 
 .meta-categories {
@@ -74,16 +57,15 @@
   margin-top: 1.2rem;
 }
 
-.film-details-description {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-}
-
-.film-details-description {
-  font-size: 1.13rem;
-  margin-bottom: 1.1rem;
+.film-details-description, .film-details-description-input {
+  font-size: 1.08rem;
   color: #eaeaea;
-  line-height: 1.6;
+  background: #16161a;
+  border: 1px solid #393e5c;
+  border-radius: 6px;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  resize: vertical;
 }
 
 .film-details-info > div {
@@ -91,20 +73,98 @@
 }
 
 .film-details-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.7rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
   font-size: 1.01rem;
 }
 
-.film-details-info-grid div strong {
-  color: #ffe066;
-  font-weight: 600;
+.film-details-info-grid div {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.2rem;
 }
 
-.film-details-loading, .film-details-error {
-  text-align: center;
-  margin-top: 2rem;
+.film-details-info-grid input {
+  background: #16161a;
+  border: 1px solid #393e5c;
+  color: #eaeaea;
+  font-size: 1rem;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  width: 100%;
+  outline: none;
+  margin-left: 0;
+}
+
+.film-details-info-grid div strong {
+  min-width: 120px;
   color: #a1a7ff;
-  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+button[type="submit"], .toggle-edit-btn {
+  background: #393e5c;
+  color: #eaeaea;
+  border: 1px solid #393e5c;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  margin-top: 0.7rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+button[type="submit"]:hover:not([disabled]), .toggle-edit-btn:hover {
+  background: #2a2e4d;
+}
+
+.save-btn[disabled] {
+  background: #393e5c !important;
+  color: #a1a7ff !important;
+  cursor: not-allowed !important;
+  border: 1.5px dashed #393e5c;
+}
+
+.success-message {
+  color: #7fffa7;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #ffadad;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.validation-error {
+  color: #ffadad;
+  font-size: 0.98rem;
+  margin: 0.2rem 0 0.5rem 0.1rem;
+  font-weight: 400;
+}
+
+.no-categories {
+  color: #a1a7ff;
+}
+
+.toggle-edit-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 2.5rem;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: #393e5c;
+  color: #eaeaea;
+  border: 1px solid #393e5c;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.7rem 2.5rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 4px 16px 0 rgba(20, 20, 40, 0.18);
 }

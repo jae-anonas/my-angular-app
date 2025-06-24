@@ -1,29 +1,85 @@
 <div class="film-details-container" *ngIf="film">
   <div class="film-details-card enhanced">
-    <div class="film-details-header">
-      <div class="film-details-title">{{ film.title }}</div>
-      <div class="film-details-meta">
-        <span class="meta-year">{{ film.release_year }}</span>
-        <span class="meta-dot">•</span>
-        <span class="meta-rating">{{ film.rating }}</span>
-        <span class="meta-dot">•</span>
-        <span class="meta-categories">
-          <ng-container *ngFor="let cat of film.categories; let last = last">
-            {{ cat.name }}<span *ngIf="!last">, </span>
-          </ng-container>
-        </span>
+    <button type="button" class="toggle-edit-btn" (click)="toggleEdit()">{{ editable ? 'Cancel' : 'Edit' }}</button>
+    <form *ngIf="editable" (ngSubmit)="onSave()" #filmForm="ngForm">
+      <div class="film-details-header">
+        <input class="film-details-title-input" name="title" [(ngModel)]="film.title" required #title="ngModel" />
+        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="validation-error">Title is required.</div>
+        <div class="film-details-meta">
+          <input class="meta-year-input" type="number" name="release_year" [(ngModel)]="film.release_year" required #releaseYear="ngModel" />
+          <span class="meta-dot">•</span>
+          <input class="meta-rating-input" name="rating" [(ngModel)]="film.rating" required #rating="ngModel" />
+          <span class="meta-dot">•</span>
+          <span class="meta-categories">
+            <ng-container *ngIf="film.categories?.length; else noCategories">
+              <ng-container *ngFor="let cat of film.categories; let i = index">
+                <input class="meta-category-input" [(ngModel)]="film.categories[i].name" name="category{{i}}" required #catName="ngModel" />
+                <span *ngIf="i < film.categories.length - 1">, </span>
+                <div *ngIf="catName.invalid && (catName.dirty || catName.touched)" class="validation-error">Category is required.</div>
+              </ng-container>
+            </ng-container>
+            <ng-template #noCategories>
+              <span class="no-categories">No categories</span>
+            </ng-template>
+          </span>
+        </div>
       </div>
-    </div>
-    <div class="film-details-body">
-      <div class="film-details-description">{{ film.description }}</div>
-      <div class="film-details-info-grid">
-        <div><strong>Length:</strong> <span>{{ film.length }} min</span></div>
-        <div><strong>Rental Rate:</strong> <span>${{ film.rental_rate }}</span></div>
-        <div><strong>Language:</strong> <span>{{ film.language }}</span></div>
-        <div><strong>Special Features:</strong> <span>{{ film.special_features }}</span></div>
-        <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
+      <div class="film-details-body">
+        <div class="film-details-info-grid">
+          <div>
+            <strong>Description:</strong>
+            <textarea id="film-description" class="film-details-description-input" name="description" [(ngModel)]="film.description" required #description="ngModel"></textarea>
+          </div>
+          <div *ngIf="description.invalid && (description.dirty || description.touched)" class="validation-error">Description is required.</div>
+          <div><strong>Length:</strong> <input type="number" name="length" [(ngModel)]="film.length" required #length="ngModel" /> min
+            <div *ngIf="length.invalid && (length.dirty || length.touched)" class="validation-error">Length is required.</div>
+          </div>
+          <div><strong>Rental Rate:</strong> $<input type="number" name="rental_rate" [(ngModel)]="film.rental_rate" required #rentalRate="ngModel" />
+            <div *ngIf="rentalRate.invalid && (rentalRate.dirty || rentalRate.touched)" class="validation-error">Rental rate is required.</div>
+          </div>
+          <div><strong>Language:</strong> <input name="language" [(ngModel)]="film.language" required #language="ngModel" />
+            <div *ngIf="language.invalid && (language.dirty || language.touched)" class="validation-error">Language is required.</div>
+          </div>
+          <div><strong>Special Features:</strong> <input name="special_features" [(ngModel)]="film.special_features" />
+          </div>
+          <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
+        </div>
       </div>
-    </div>
+      <button type="submit" [disabled]="filmForm.invalid" class="save-btn">Save</button>
+      <div *ngIf="saveSuccess" class="success-message">Film updated successfully!</div>
+      <div *ngIf="saveError" class="error-message">Error: {{ saveError }}</div>
+    </form>
+    <ng-container *ngIf="!editable">
+      <div class="film-details-header">
+        <div class="film-details-title">{{ film.title }}</div>
+        <div class="film-details-meta">
+          <span class="meta-year">{{ film.release_year }}</span>
+          <span class="meta-dot">•</span>
+          <span class="meta-rating">{{ film.rating }}</span>
+          <span class="meta-dot">•</span>
+          <span class="meta-categories">
+            <ng-container *ngIf="film.categories?.length; else noCategoriesView">
+              <ng-container *ngFor="let cat of film.categories; let last = last">
+                {{ cat.name }}<span *ngIf="!last">, </span>
+              </ng-container>
+            </ng-container>
+            <ng-template #noCategoriesView>
+              <span class="no-categories">No categories</span>
+            </ng-template>
+          </span>
+        </div>
+      </div>
+      <div class="film-details-body">
+        <div class="film-details-info-grid">
+          <div><strong>Description:</strong> <span>{{ film.description }}</span></div>
+          <div><strong>Length:</strong> <span>{{ film.length }} min</span></div>
+          <div><strong>Rental Rate:</strong> <span>${{ film.rental_rate }}</span></div>
+          <div><strong>Language:</strong> <span>{{ film.language }}</span></div>
+          <div><strong>Special Features:</strong> <span>{{ film.special_features }}</span></div>
+          <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>
 <div *ngIf="loading" class="film-details-loading">Loading...</div>

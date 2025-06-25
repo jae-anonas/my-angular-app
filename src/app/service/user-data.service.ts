@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UserDataService {
 
-  private readonly filmsList = 'http://localhost:3000/query';
+  private readonly filmsList = 'http://localhost:3000/api/query';
   constructor(
   private http: HttpClient) { }
 

@@ -8,6 +8,7 @@ import { UserData } from '../model/user-data';
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:3000/api/';
   private userSubject: BehaviorSubject<any>;
   public user: Observable<any>;
 
@@ -25,13 +26,13 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/signin', { username, password });
+    return this.http.post<any>(this.apiUrl + 'signin', { username, password });
   }
 
   createUser(userData: UserData): Observable<any> {
     // Simulate user creation
     console.log('Create user:', JSON.stringify(userData));
-    return this.http.post<any>('http://localhost:3000/signup', { userData });
+    return this.http.post<any>(this.apiUrl + 'signup', { userData });
   }
 
   logout() {

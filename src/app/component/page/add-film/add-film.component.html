@@ -14,8 +14,11 @@
       <input type="number" name="release_year" [(ngModel)]="film.release_year" required />
     </div>
     <div class="form-group">
-      <label>Language ID</label>
-      <input type="number" name="language_id" [(ngModel)]="film.language_id" required />
+      <label>Language</label>
+      <select name="language_id" [(ngModel)]="film.language_id" required>
+        <option value="" disabled selected>Select a language</option>
+        <option *ngFor="let lang of languageOptions" [value]="lang.language_id">{{ lang.name }}</option>
+      </select>
     </div>
     <div class="form-group">
       <label>Rental Duration</label>
@@ -34,8 +37,10 @@
       <input type="text" name="rating" [(ngModel)]="film.rating" required />
     </div>
     <div class="form-group">
-      <label>Categories (comma separated)</label>
-      <input type="text" name="categories" [(ngModel)]="categoriesInput" placeholder="e.g. Action, Comedy" />
+      <label>Categories</label>
+      <select name="categories" [(ngModel)]="selectedCategories" multiple required>
+        <option *ngFor="let cat of categoryOptions" [value]="cat.category_id">{{ cat.name }}</option>
+      </select>
     </div>
     <div class="form-group">
       <label>Length</label>

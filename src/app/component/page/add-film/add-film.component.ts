@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilmService } from '../../../service/film.service';
@@ -9,7 +9,7 @@ import { FilmService } from '../../../service/film.service';
   styleUrls: ['./add-film.component.scss'],
   imports: [CommonModule, FormsModule]
 })
-export class AddFilmComponent {
+export class AddFilmComponent implements OnInit {
   film: any = {
     title: '',
     description: '',
@@ -22,14 +22,21 @@ export class AddFilmComponent {
     length: '',
     categories: []
   };
-  categoriesInput = '';
+  selectedCategories: number[] = [];
+  categoryOptions: any[] = [];
+  languageOptions: any[] = [];
   success = false;
   error = '';
 
   constructor(private filmService: FilmService) {}
 
+  ngOnInit() {
+    this.filmService.getCategoryOptions().subscribe(opts => this.categoryOptions = opts);
+    this.filmService.getLanguageOptions().subscribe(opts => this.languageOptions = opts);
+  }
+
   onSubmit() {
-    this.film.categories = this.categoriesInput.split(',').map((c: string) => c.trim()).filter((c: string) => c);
+    this.film.categories = this.selectedCategories;
     this.filmService.createFilm(this.film).subscribe({
       next: () => {
         this.success = true;

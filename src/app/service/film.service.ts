@@ -5,7 +5,7 @@ import { FilmDataResponse, FilmData, FilmDataByCategoryResponse } from '../model
 
 @Injectable({ providedIn: 'root' })
 export class FilmService {
-  private apiUrl = 'http://localhost:3000/films/';
+  private apiUrl = 'http://localhost:3000/api/films/';
 
   constructor(private http: HttpClient) {}
 
@@ -37,5 +37,13 @@ export class FilmService {
 
   updateFilm(film: any) {
     return this.http.put(this.apiUrl + 'edit', film);
+  }
+
+  getCategoryOptions() {
+    return this.http.get<any[]>(this.apiUrl + 'categories/options');
+  }
+
+  getLanguageOptions() {
+    return this.http.get<any[]>(this.apiUrl + 'languages/options');
   }
 }

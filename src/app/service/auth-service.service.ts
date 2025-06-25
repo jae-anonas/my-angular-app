@@ -8,7 +8,7 @@ import { UserData } from '../model/user-data';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/';
+  private apiUrl = '/api/';
   private userSubject: BehaviorSubject<any>;
   public user: Observable<any>;
 

@@ -5,7 +5,7 @@ import { FilmDataResponse, FilmData, FilmDataByCategoryResponse } from '../model
 
 @Injectable({ providedIn: 'root' })
 export class FilmService {
-  private apiUrl = 'http://localhost:3000/api/films/';
+  private apiUrl = '/api/films/';
 
   constructor(private http: HttpClient) {}
 
@@ -22,9 +22,7 @@ export class FilmService {
   }
 
   getFilmsByCategory(categories: string[]): Observable<FilmDataByCategoryResponse[]> {
-    // This should call your backend, but here is a mock for demo purposes
     return this.http.post<FilmDataByCategoryResponse[]>(this.apiUrl + 'by-categories', {categories: categories, limit: 13});
-    // return this.http.get<{ name: string; films: FilmData[] }[]>(this.apiUrl + 'by-category');
   }
 
   getFilmById(id: string) {
@@ -40,10 +38,10 @@ export class FilmService {
   }
 
   getCategoryOptions() {
-    return this.http.get<any[]>(this.apiUrl + 'categories/options');
+    return this.http.get<any[]>('/api/categories/options');
   }
 
   getLanguageOptions() {
-    return this.http.get<any[]>(this.apiUrl + 'languages/options');
+    return this.http.get<any[]>('/api/languages/options');
   }
 }

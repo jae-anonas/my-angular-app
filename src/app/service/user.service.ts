@@ -15,7 +15,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/api/users';
+  private apiUrl = '/api/users';
 
   constructor(private http: HttpClient) {}
 
@@ -24,11 +24,11 @@ export class UserService {
   }
 
   getUserById(id: string) {
-    return this.http.get<any>('http://localhost:3000/users/by-id', { params: { id } });
+    return this.http.get<any>('/api/users/by-id', { params: { id } });
   }
 
   saveUserEdits(user: Partial<User>) {
     // Expects user object with id and fields to update
-    return this.http.put<any>('http://localhost:3000/users/edit', user);
+    return this.http.put<any>('/api/users/edit', user);
   }
 }

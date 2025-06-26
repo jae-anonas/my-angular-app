@@ -58,6 +58,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "otherProject": {
+              "outputPath": "../my-node-app/dist/my-angular-app",
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"

@@ -12,8 +12,21 @@
         <button class="remove-btn" (click)="removeFromCart(film.film_id)" title="Remove">✖️</button>
       </li>
     </ul>
+    <div *ngIf="cart.length > 0" class="cart-summary">
+      <div class="cart-total">
+        <span class="total-label">Total:</span>
+        <span class="total-amount">${{ getTotalCost().toFixed(2) }}</span>
+      </div>
+    </div>
     <div *ngIf="cart.length > 0" class="cart-actions">
-      <button class="btn btn-danger" (click)="clearCart()">Clear Cart</button>
+      <button 
+        class="btn btn-primary checkout-btn" 
+        (click)="onCheckout()" 
+        [disabled]="isCheckingOut">
+        <span *ngIf="!isCheckingOut">🛒 Checkout</span>
+        <span *ngIf="isCheckingOut">Processing...</span>
+      </button>
+      <button class="btn btn-secondary clear-btn" (click)="clearCart()" [disabled]="isCheckingOut">Clear Cart</button>
     </div>
   </div>
 </div>

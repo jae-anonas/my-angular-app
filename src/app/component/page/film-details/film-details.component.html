@@ -84,19 +84,49 @@
       <div class="inventory-cart-section">
         <div class="inventory-info">
           <h3>🏪 Availability</h3>
-          <div *ngIf="inventoryData.length > 0" class="inventory-stores">
-            <div *ngFor="let store of inventoryData" class="store-availability">
-              <span class="store-name">Store {{ store.store_id || store.store_name }}</span>
-              <span class="availability-count" [class]="(store.copies_count) > 0 ? 'available' : 'unavailable'">
-                {{ store.copies_count || 0 }} available
-              </span>
+          
+          <!-- Store-specific availability for non-admin users -->
+          <div *ngIf="!isAdmin" class="user-store-availability">
+            <div *ngIf="loadingAvailability" class="loading-availability">
+              Checking availability in your store...
             </div>
-            <div class="total-availability">
-              <strong>Total Available: {{ totalAvailable }} copies</strong>
+            <div *ngIf="!loadingAvailability && availabilityData" class="user-store-info">
+              <div class="store-availability-header">
+                <span class="store-name">Your Store (ID: {{ availabilityData.store.store_id }})</span>
+              </div>
+              <div class="availability-details">
+                <div class="availability-status" [class]="availabilityData.availability.is_available ? 'available' : 'unavailable'">
+                  <span class="status-text">
+                    {{ availabilityData.availability.is_available ? '✅ Available' : '❌ Not Available' }}
+                  </span>
+                </div>
+                <div class="copy-counts">
+                  <span class="available-count">{{ availabilityData.availability.available_copies }} available</span>
+                  <span class="total-count">of {{ availabilityData.availability.total_copies }} total</span>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!loadingAvailability && !availabilityData" class="no-store-info">
+              Unable to check availability in your store
             </div>
           </div>
-          <div *ngIf="inventoryData.length === 0" class="no-inventory">
-            No inventory information available
+
+          <!-- General inventory for admin users -->
+          <div *ngIf="isAdmin" class="general-inventory">
+            <div *ngIf="inventoryData.length > 0" class="inventory-stores">
+              <div *ngFor="let store of inventoryData" class="store-availability">
+                <span class="store-name">Store {{ store.store_id || store.store_name }}</span>
+                <span class="availability-count" [class]="(store.copies_count) > 0 ? 'available' : 'unavailable'">
+                  {{ store.copies_count || 0 }} available
+                </span>
+              </div>
+              <div class="total-availability">
+                <strong>Total Available: {{ totalAvailable }} copies</strong>
+              </div>
+            </div>
+            <div *ngIf="inventoryData.length === 0" class="no-inventory">
+              No inventory information available
+            </div>
           </div>
         </div>
         
@@ -104,10 +134,13 @@
           <button 
             class="add-to-cart-btn" 
             (click)="addToCart()" 
-            [disabled]="totalAvailable === 0"
-            [class.disabled]="totalAvailable === 0">
+            [disabled]="loadingAvailability || !isAvailableInUserStore"
+            [class.disabled]="loadingAvailability || !isAvailableInUserStore">
             <span class="cart-icon">🛒</span>
-            <span class="cart-text">{{ totalAvailable > 0 ? 'Add to Cart' : 'Out of Stock' }}</span>
+            <span class="cart-text" *ngIf="!loadingAvailability">
+              {{ isAvailableInUserStore ? 'Add to Cart' : 'Not Available in Your Store' }}
+            </span>
+            <span class="cart-text" *ngIf="loadingAvailability">Checking...</span>
           </button>
           <div class="rental-info">
             <small>Rental Rate: ${{ film.rental_rate }} per day</small>

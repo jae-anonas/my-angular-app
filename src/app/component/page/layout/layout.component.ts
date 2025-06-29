@@ -17,6 +17,7 @@ export class LayoutComponent implements OnInit {
   showDropdown = false;
   cartCount = 0;
   isAdmin = false;
+  customerInfo: any = null;
 
   constructor(private router: Router, private cartService: CartService) {
     this.cartService.cart$.subscribe(items => this.cartCount = items.length);
@@ -31,6 +32,7 @@ export class LayoutComponent implements OnInit {
     if (userData) {
       const user = JSON.parse(userData);
       this.isAdmin = user.role === 'admin';
+      this.customerInfo = user.customer || null;
     }
   }
 

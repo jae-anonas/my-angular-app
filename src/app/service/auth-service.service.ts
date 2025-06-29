@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserData } from '../model/user-data';
+import { API_ENDPOINTS } from '../constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api/';
+  private apiUrl = API_ENDPOINTS.BASE_URL;
   private userSubject: BehaviorSubject<any>;
   public user: Observable<any>;
 

@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FilmDataResponse, FilmData, FilmDataByCategoryResponse } from '../model/film-data';
+import { API_ENDPOINTS } from '../constants/api.constants';
 
 @Injectable({ providedIn: 'root' })
 export class FilmService {
-  private apiUrl = '/api/films/';
+  private apiUrl = API_ENDPOINTS.FILMS;
 
   constructor(private http: HttpClient) {}
 
@@ -38,10 +39,10 @@ export class FilmService {
   }
 
   getCategoryOptions() {
-    return this.http.get<any[]>('/api/categories/options');
+    return this.http.get<any[]>(API_ENDPOINTS.CATEGORIES);
   }
 
   getLanguageOptions() {
-    return this.http.get<any[]>('/api/languages/options');
+    return this.http.get<any[]>(API_ENDPOINTS.LANGUAGES);
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '../constants/api.constants';
 
 export interface User {
   id: number;
@@ -15,7 +16,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private apiUrl = '/api/users';
+  private apiUrl = API_ENDPOINTS.USERS;
 
   constructor(private http: HttpClient) {}
 

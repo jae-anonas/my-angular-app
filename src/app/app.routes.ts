@@ -23,6 +23,10 @@ export const routes: Routes = [
         component: LoginComponent
     },
     {
+        path: 'create-user',
+        component: CreateUserComponent
+    },
+    {
         path: '',
         component: LayoutComponent,
         canActivate: [AuthGuard],
@@ -38,10 +42,6 @@ export const routes: Routes = [
             {
                 path: 'user-list',
                 component: UserListComponent
-            },
-            {
-                path: 'create-user',
-                component: CreateUserComponent
             },
             {
                 path: 'profile/:id',

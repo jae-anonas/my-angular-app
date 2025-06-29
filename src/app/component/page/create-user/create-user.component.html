@@ -15,6 +15,16 @@
         <input type="email" id="email" class="form-control" formControlName="email" placeholder="Enter your email">
       </div>
       <div class="mb-3">
+        <label for="store" class="form-label">Store</label>
+        <select id="store" class="form-control" formControlName="store_id" [class.is-invalid]="createUserForm.get('store_id')?.invalid && createUserForm.get('store_id')?.touched">
+          <option value="">Select a store</option>
+          <option *ngFor="let store of storeOptions" [value]="store.store_id">{{ store.label }}</option>
+        </select>
+        <div *ngIf="createUserForm.get('store_id')?.invalid && createUserForm.get('store_id')?.touched" class="form-validation-error">
+          Please select a store.
+        </div>
+      </div>
+      <div class="mb-3">
         <label for="password" class="form-label">Password</label>
         <input type="password" id="password" class="form-control" formControlName="password" placeholder="Create a password">
       </div>

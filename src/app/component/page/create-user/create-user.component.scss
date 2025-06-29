@@ -74,6 +74,10 @@
   box-sizing: border-box;
 }
 
+.create-user-card .form-control.is-invalid {
+  border-color: #ffb4b4;
+}
+
 .create-user-card .form-control:focus {
   border-color: #a1a7ff;
   background: #232946;
@@ -128,4 +132,10 @@
   color: #ffb4b4;
   border: none;
   margin-top: 1rem;
+}
+
+.form-validation-error {
+  color: #ffb4b4;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }

@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   USERS: domain + '/api/users',
   CATEGORIES: domain + '/api/categories/options',
   LANGUAGES: domain + '/api/languages/options',
+  STORES: domain + '/api/stores/options',
   INVENTORY: domain + '/api/inventory/'
 } as const;
 // export const API_ENDPOINTS = {

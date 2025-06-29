@@ -46,6 +46,10 @@ export class FilmService {
     return this.http.get<any[]>(API_ENDPOINTS.LANGUAGES);
   }
 
+  getStoreOptions() {
+    return this.http.get<any[]>(API_ENDPOINTS.STORES);
+  }
+
   // Inventory endpoints
   getInventoryData(params: {
     film_title?: string;

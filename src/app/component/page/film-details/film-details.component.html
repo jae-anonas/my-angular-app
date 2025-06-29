@@ -1,7 +1,7 @@
 <div class="film-details-container" *ngIf="film">
   <div class="film-details-card enhanced">
-    <button type="button" class="toggle-edit-btn" (click)="toggleEdit()">{{ editable ? 'Cancel' : 'Edit' }}</button>
-    <form *ngIf="editable" (ngSubmit)="onSave()" #filmForm="ngForm">
+    <button type="button" class="toggle-edit-btn" *ngIf="isAdmin" (click)="toggleEdit()">{{ editable ? 'Cancel' : 'Edit' }}</button>
+    <form *ngIf="editable && isAdmin" (ngSubmit)="onSave()" #filmForm="ngForm">
       <div class="film-details-header">
         <input class="film-details-title-input" name="title" [(ngModel)]="film.title" required #title="ngModel" />
         <div *ngIf="title.invalid && (title.dirty || title.touched)" class="validation-error">Title is required.</div>

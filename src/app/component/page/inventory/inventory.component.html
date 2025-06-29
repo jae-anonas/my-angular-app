@@ -1,21 +1,93 @@
 <div class="inventory-container">
-  <h2>Film Inventory</h2>
-  <table class="inventory-table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Category</th>
-        <th>Year</th>
-        <th>Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let film of films">
-        <td>{{ film.title }}</td>
-        <td>{{ film.categories[0].name }}</td>
-        <td>{{ film.release_year }}</td>
-        <td>{{ film.rating }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="inventory-header">
+    <h2>📦 Film Inventory Management</h2>
+    <p class="inventory-description">Track and manage film inventory across stores</p>
+  </div>
+
+  <!-- Search and Filter Controls -->
+  <div class="inventory-controls">
+    <div class="search-section">
+      <div class="search-group">
+        <label for="filmTitle">🎬 Film Title:</label>
+        <input 
+          type="text" 
+          id="filmTitle"
+          [(ngModel)]="filmTitle" 
+          placeholder="Search by film title..."
+          class="search-input"
+        />
+      </div>
+      
+      <div class="filter-group">
+        <label for="category">🎭 Category:</label>
+        <select id="category" [(ngModel)]="selectedCategory" class="filter-select">
+          <option value="">All Categories</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat | titlecase }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="store">🏪 Store:</label>
+        <select id="store" [(ngModel)]="selectedStoreId" class="filter-select">
+          <option [value]="null">All Stores</option>
+          <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="search-btn" (click)="onSearch()" [disabled]="loading">
+        🔍 {{ loading ? 'Searching...' : 'Search' }}
+      </button>
+      <button class="clear-btn" (click)="onClearFilters()">
+        🗑️ Clear Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading inventory data...</p>
+  </div>
+
+  <!-- Inventory Results -->
+  <div *ngIf="!loading && inventoryData.length > 0" class="inventory-results">
+    <div class="results-header">
+      <h3>📋 Inventory Results ({{ inventoryData.length }} films)</h3>
+    </div>
+
+    <!-- Film Inventory Display -->
+    <div class="inventory-cards">
+      <div *ngFor="let item of inventoryData" class="inventory-card film-group">
+        <div class="card-header">
+          <h4>🎬 {{ item.film?.title || item.film_title }}</h4>
+          <span class="total-count">{{ item.total_inventory_count || item.total_copies }} copies</span>
+        </div>
+        <div class="card-body">
+          <div class="film-details">
+            <span class="detail"><strong>Year:</strong> {{ item.film?.release_year || item.release_year }}</span>
+            <span class="detail"><strong>Rating:</strong> {{ item.film?.rating || item.rating }}</span>
+            <span class="detail"><strong>Stores:</strong> {{ item.stores_count }} stores</span>
+          </div>
+          <div class="film-description">
+            <p><strong>Description:</strong> {{ item.film?.description || item.description }}</p>
+          </div>
+          <div *ngIf="item.stores" class="store-breakdown">
+            <h5>🏪 Store Distribution:</h5>
+            <div *ngFor="let store of item.stores" class="store-item">
+              <span>{{ store.store_name }}: {{ store.count }} copies</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!loading && inventoryData.length === 0" class="no-results">
+    <div class="no-results-icon">📭</div>
+    <h3>No inventory data found</h3>
+    <p>Try adjusting your search criteria or filters</p>
+  </div>
 </div>

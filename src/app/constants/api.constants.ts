@@ -7,7 +7,8 @@ export const API_ENDPOINTS = {
   FILMS: domain + '/api/films/',
   USERS: domain + '/api/users',
   CATEGORIES: domain + '/api/categories/options',
-  LANGUAGES: domain + '/api/languages/options'
+  LANGUAGES: domain + '/api/languages/options',
+  INVENTORY: domain + '/api/inventory/'
 } as const;
 // export const API_ENDPOINTS = {
 //   BASE_URL: '/api',

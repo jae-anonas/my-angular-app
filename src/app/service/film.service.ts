@@ -45,4 +45,29 @@ export class FilmService {
   getLanguageOptions() {
     return this.http.get<any[]>(API_ENDPOINTS.LANGUAGES);
   }
+
+  // Inventory endpoints
+  getInventoryData(params: {
+    film_title?: string;
+    category?: string;
+    store_id?: number;
+    groupBy?: 'film' | 'store' | 'none';
+  } = {}) {
+    let httpParams = new HttpParams();
+    
+    if (params.film_title) {
+      httpParams = httpParams.set('film_title', params.film_title);
+    }
+    if (params.category) {
+      httpParams = httpParams.set('category', params.category);
+    }
+    if (params.store_id) {
+      httpParams = httpParams.set('store_id', params.store_id.toString());
+    }
+    if (params.groupBy) {
+      httpParams = httpParams.set('groupBy', params.groupBy);
+    }
+
+    return this.http.get<any>(API_ENDPOINTS.INVENTORY + 'search', { params: httpParams });
+  }
 }

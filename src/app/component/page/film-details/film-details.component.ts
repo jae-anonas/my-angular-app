@@ -18,10 +18,12 @@ export class FilmDetailsComponent implements OnInit {
   saveSuccess = false;
   saveError = '';
   editable = false;
+  isAdmin = false;
   private route = inject(ActivatedRoute);
   private filmService = inject(FilmService);
 
   ngOnInit() {
+    this.checkUserRole();
     const filmId = this.route.snapshot.paramMap.get('id');
     if (filmId) {
       this.loading = true;
@@ -38,7 +40,18 @@ export class FilmDetailsComponent implements OnInit {
     }
   }
 
+  checkUserRole() {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.isAdmin = user.role === 'admin';
+    }
+  }
+
   toggleEdit() {
+    if (!this.isAdmin) {
+      return; // Prevent non-admin users from editing
+    }
     this.editable = !this.editable;
     this.saveSuccess = false;
     this.saveError = '';

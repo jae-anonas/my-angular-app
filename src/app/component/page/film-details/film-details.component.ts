@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FilmService } from '../../../service/film.service';
 import { FilmData } from '../../../model/film-data';
+import { CartService } from '../../../service/cart.service';
 
 @Component({
   selector: 'app-film-details',
@@ -19,8 +20,11 @@ export class FilmDetailsComponent implements OnInit {
   saveError = '';
   editable = false;
   isAdmin = false;
+  inventoryData: any[] = [];
+  totalAvailable = 0;
   private route = inject(ActivatedRoute);
   private filmService = inject(FilmService);
+  private cartService = inject(CartService);
 
   ngOnInit() {
     this.checkUserRole();
@@ -30,6 +34,11 @@ export class FilmDetailsComponent implements OnInit {
       this.filmService.getFilmById(filmId).subscribe({
         next: (res) => {
           this.film = res.film || res;
+          // Process inventory data if included in response
+          if (res.inventory || res.film?.inventory) {
+            this.inventoryData = res.inventory || res.film?.inventory || [];
+            this.calculateTotalAvailable();
+          }
           this.loading = false;
         },
         error: () => {
@@ -38,6 +47,12 @@ export class FilmDetailsComponent implements OnInit {
         }
       });
     }
+  }
+
+  calculateTotalAvailable() {
+    this.totalAvailable = this.inventoryData.reduce((total, store) => {
+      return total + (store.copies_count || 0);
+    }, 0);
   }
 
   checkUserRole() {
@@ -70,5 +85,11 @@ export class FilmDetailsComponent implements OnInit {
         this.saveError = err?.error?.message || 'Failed to update film.';
       }
     });
+  }
+
+  addToCart() {
+    if (this.film && this.totalAvailable > 0) {
+      this.cartService.addToCart(this.film);
+    }
   }
 }

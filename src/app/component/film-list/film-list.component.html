@@ -13,9 +13,6 @@
       </div>
       <div class="film-title-row">
         <div class="film-title">{{ film.title }}</div>
-        <button class="add-cart-btn" (click)="addToCart(film); $event.stopPropagation(); $event.preventDefault();" title="Add to Cart">
-          <span>🛒</span>
-        </button>
       </div>
       <div class="film-meta">
         <span>{{ film.release_year }}</span> •

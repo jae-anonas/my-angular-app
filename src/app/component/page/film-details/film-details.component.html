@@ -79,6 +79,41 @@
           <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
         </div>
       </div>
+
+      <!-- Inventory and Cart Section -->
+      <div class="inventory-cart-section">
+        <div class="inventory-info">
+          <h3>🏪 Availability</h3>
+          <div *ngIf="inventoryData.length > 0" class="inventory-stores">
+            <div *ngFor="let store of inventoryData" class="store-availability">
+              <span class="store-name">Store {{ store.store_id || store.store_name }}</span>
+              <span class="availability-count" [class]="(store.copies_count) > 0 ? 'available' : 'unavailable'">
+                {{ store.copies_count || 0 }} available
+              </span>
+            </div>
+            <div class="total-availability">
+              <strong>Total Available: {{ totalAvailable }} copies</strong>
+            </div>
+          </div>
+          <div *ngIf="inventoryData.length === 0" class="no-inventory">
+            No inventory information available
+          </div>
+        </div>
+        
+        <div class="cart-actions" *ngIf="!isAdmin">
+          <button 
+            class="add-to-cart-btn" 
+            (click)="addToCart()" 
+            [disabled]="totalAvailable === 0"
+            [class.disabled]="totalAvailable === 0">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-text">{{ totalAvailable > 0 ? 'Add to Cart' : 'Out of Stock' }}</span>
+          </button>
+          <div class="rental-info">
+            <small>Rental Rate: ${{ film.rental_rate }} per day</small>
+          </div>
+        </div>
+      </div>
     </ng-container>
   </div>
 </div>

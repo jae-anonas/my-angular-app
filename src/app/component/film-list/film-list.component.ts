@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FilmData, FilmDataResponse } from '../../model/film-data';
 import { FilmService } from '../../service/film.service';
 import { FormsModule } from '@angular/forms';
-import { CartService } from '../../service/cart.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -34,7 +33,7 @@ export class FilmListComponent implements OnInit {
     'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
   ];
 
-  constructor(private filmService: FilmService, private cartService: CartService) {}
+  constructor(private filmService: FilmService) {}
 
   ngOnInit() {
     this.loadFilms();
@@ -69,10 +68,6 @@ export class FilmListComponent implements OnInit {
 
   getRandomGradient(id: number): string {
     return this.gradients[id % this.gradients.length];
-  }
-
-  addToCart(film: FilmData) {
-    this.cartService.addToCart(film);
   }
 
   getVisiblePages(): number[] {

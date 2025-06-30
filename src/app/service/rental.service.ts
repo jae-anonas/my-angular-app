@@ -11,8 +11,18 @@ export interface CreateRentalRequest {
 
 export interface CreateRentalResponse {
   success: boolean;
-  rental_ids: number[];
   message: string;
+  rentals: Array<{
+    rental_id: number;
+    inventory_id: number;
+    customer_id: number;
+    staff_id: number;
+    rental_date: string;
+    film_title: string;
+    store_id: number;
+  }>;
+  created_count: number;
+  requested_count: number;
 }
 
 export interface InventoryItem {

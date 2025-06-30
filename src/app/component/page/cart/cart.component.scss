@@ -159,3 +159,301 @@
     cursor: not-allowed;
   }
 }
+
+// Modal styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #232946;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(20, 20, 40, 0.4);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: #eaeaea;
+  
+  &.success-modal {
+    max-width: 700px;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #393e5c;
+  
+  h3 {
+    margin: 0;
+    color: #a1a7ff;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    color: #b0b8c1;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    
+    &:hover {
+      color: #ffb4b4;
+    }
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+  
+  p {
+    margin-bottom: 1.5rem;
+    color: #eaeaea;
+    font-size: 1.1rem;
+  }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #393e5c;
+}
+
+.checkout-summary {
+  background: #1a1e2e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.summary-films {
+  margin-bottom: 1rem;
+}
+
+.summary-film-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #393e5c;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .film-title {
+    color: #eaeaea;
+    font-weight: 600;
+  }
+  
+  .film-rate {
+    color: #a1a7ff;
+    font-weight: 600;
+  }
+}
+
+.summary-total {
+  text-align: right;
+  padding-top: 1rem;
+  border-top: 1px solid #393e5c;
+  color: #a1a7ff;
+  font-size: 1.2rem;
+}
+
+.success-message {
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  p {
+    color: #22c55e;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.checkout-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail-section {
+  h4 {
+    color: #a1a7ff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.rental-info {
+  background: #1a1e2e;
+  border-radius: 8px;
+  padding: 1rem;
+  
+  p {
+    margin-bottom: 0.5rem;
+    color: #eaeaea;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    strong {
+      color: #a1a7ff;
+    }
+  }
+}
+
+.rented-films {
+  background: #1a1e2e;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.rented-film-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #393e5c;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.film-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  
+  .film-title {
+    color: #eaeaea;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .film-meta {
+    color: #b0b8c1;
+    font-size: 0.9rem;
+  }
+  
+  .film-rate {
+    color: #a1a7ff;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &.btn-primary {
+    background: linear-gradient(135deg, #a1a7ff, #6b73ff);
+    color: white;
+    box-shadow: 0 2px 8px rgba(161, 167, 255, 0.3);
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(161, 167, 255, 0.4);
+    }
+  }
+  
+  &.btn-secondary {
+    background: #404040;
+    color: #eaeaea;
+    
+    &:hover:not(:disabled) {
+      background: #505050;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// Additional styles for rental details
+.warning-message {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.rental-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  
+  .rental-id {
+    font-weight: 600;
+    color: #a1a7ff;
+  }
+  
+  .rental-date {
+    color: #888;
+  }
+}
+
+.store-info {
+  color: #888;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 1rem;
+  }
+  
+  .checkout-details {
+    gap: 1rem;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}

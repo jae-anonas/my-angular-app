@@ -30,3 +30,82 @@
     </div>
   </div>
 </div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showConfirmModal" (click)="closeConfirmModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>🛒 Confirm Checkout</h3>
+      <button class="modal-close" (click)="closeConfirmModal()">✖️</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to checkout the following films?</p>
+      <div class="checkout-summary">
+        <div class="summary-films">
+          <div *ngFor="let film of cart" class="summary-film-item">
+            <span class="film-title">{{ film.title }}</span>
+            <span class="film-rate">${{ film.rental_rate }}</span>
+          </div>
+        </div>
+        <div class="summary-total">
+          <strong>Total: ${{ getTotalCost().toFixed(2) }}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeConfirmModal()">Cancel</button>
+      <button class="btn btn-primary" (click)="confirmCheckout()" [disabled]="isCheckingOut">
+        <span *ngIf="!isCheckingOut">Confirm Checkout</span>
+        <span *ngIf="isCheckingOut">Processing...</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" *ngIf="showSuccessModal" (click)="closeSuccessModal()">
+  <div class="modal-content success-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>✅ Checkout Successful!</h3>
+      <button class="modal-close" (click)="closeSuccessModal()">✖️</button>
+    </div>
+    <div class="modal-body" *ngIf="checkoutSummary">
+      <div class="success-message">
+        <p>{{ checkoutSummary.message }}</p>
+        <p *ngIf="checkoutSummary.createdCount !== checkoutSummary.requestedCount" class="warning-message">
+          Note: {{ checkoutSummary.createdCount }} of {{ checkoutSummary.requestedCount }} rentals were created.
+        </p>
+      </div>
+      
+      <div class="checkout-details">
+        <div class="detail-section">
+          <h4>📋 Rental Summary</h4>
+          <div class="rental-info">
+            <p><strong>Checkout Date:</strong> {{ checkoutSummary.checkoutDate | date:'medium' }}</p>
+            <p><strong>Total Amount:</strong> ${{ checkoutSummary.total.toFixed(2) }}</p>
+            <p><strong>Rentals Created:</strong> {{ checkoutSummary.createdCount }}</p>
+          </div>
+        </div>
+        
+        <div class="detail-section">
+          <h4>🎬 Rental Details</h4>
+          <div class="rented-films">
+            <div *ngFor="let rental of checkoutSummary.rentals" class="rented-film-item">
+              <div class="film-details">
+                <span class="film-title">{{ rental.film_title }}</span>
+                <span class="rental-meta">
+                  <span class="rental-id">Rental ID: {{ rental.rental_id }}</span>
+                  <span class="rental-date">{{ rental.rental_date | date:'short' }}</span>
+                </span>
+                <span class="store-info">Store: {{ rental.store_id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="closeSuccessModal()">Close</button>
+    </div>
+  </div>
+</div>

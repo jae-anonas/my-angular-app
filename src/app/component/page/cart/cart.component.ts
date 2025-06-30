@@ -18,6 +18,9 @@ import { forkJoin } from 'rxjs';
 export class CartComponent {
   cart: FilmData[] = [];
   isCheckingOut = false;
+  showConfirmModal = false;
+  showSuccessModal = false;
+  checkoutSummary: any = null;
   private messageService = inject(MessageService);
 
   constructor(
@@ -46,6 +49,22 @@ export class CartComponent {
       this.messageService.show('Your cart is empty!', 'error');
       return;
     }
+
+    // Show confirmation modal instead of proceeding directly
+    this.showConfirmModal = true;
+  }
+
+  closeConfirmModal() {
+    this.showConfirmModal = false;
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.checkoutSummary = null;
+  }
+
+  confirmCheckout() {
+    this.showConfirmModal = false;
 
     const userData = this.authService.userValue;
     if (!userData || !userData.customer?.customer_id || !userData.customer?.store_id) {
@@ -97,8 +116,22 @@ export class CartComponent {
           next: (response) => {
             this.isCheckingOut = false;
             if (response.success) {
-              this.messageService.show(`Rental created successfully! Rental IDs: ${response.rental_ids.join(', ')}`, 'success');
+              // Create checkout summary using the actual API response structure
+              this.checkoutSummary = {
+                films: [...this.cart],
+                total: this.getTotalCost(),
+                rentalIds: response.rentals.map((rental: any) => rental.rental_id),
+                checkoutDate: new Date(),
+                rentals: response.rentals,
+                message: response.message,
+                createdCount: response.created_count,
+                requestedCount: response.requested_count
+              };
+              
+              // Clear cart and show success modal
               this.cartService.clearCart();
+              this.showSuccessModal = true;
+              this.messageService.show(response.message || 'Rental created successfully!', 'success');
             } else {
               this.messageService.show(response.message || 'Checkout failed. Please try again.', 'error');
             }

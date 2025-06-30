@@ -81,7 +81,7 @@ export class FilmDetailsComponent implements OnInit {
 
   calculateTotalAvailable() {
     this.totalAvailable = this.inventoryData.reduce((total, store) => {
-      return total + (store.available_count || store.total_inventory_count || 0);
+      return total + (store.copies_count || 0);
     }, 0);
   }
 

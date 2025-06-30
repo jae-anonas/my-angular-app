@@ -10,7 +10,8 @@ export const API_ENDPOINTS = {
   LANGUAGES: domain + '/api/languages/options',
   STORES: domain + '/api/stores/options',
   INVENTORY: domain + '/api/inventory/',
-  RENTALS: domain + '/api/rentals/'
+  RENTALS: domain + '/api/rentals/',
+  CUSTOMERS: domain + '/api/customers/'
 } as const;
 // export const API_ENDPOINTS = {
 //   BASE_URL: '/api',

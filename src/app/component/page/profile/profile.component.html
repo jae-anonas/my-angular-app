@@ -1,54 +1,138 @@
 <div class="profile-container">
-  <div class="profile-card">
-    <div class="profile-avatar">
-      <span>👤</span>
+  <div class="profile-header">
+    <h2>👤 My Profile</h2>
+    <p class="profile-description">Manage your account information</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading profile...</p>
+  </div>
+
+  <div *ngIf="!loading && !customerData" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Profile Not Found</h3>
+    <p>Unable to load profile information.</p>
+  </div>
+
+  <div *ngIf="!loading && customerData" class="profile-content">
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <span class="avatar-icon">{{ (customerData.first_name.charAt(0) || '?').toUpperCase() }}{{ (customerData.last_name.charAt(0) || '').toUpperCase() }}</span>
+      </div>
+      
+      <div class="profile-info">
+        <h3 class="customer-name">{{ customerData.first_name }} {{ customerData.last_name }}</h3>
+        <p class="customer-email">{{ customerData.email }}</p>
+        <div class="customer-status">
+          <span class="status-badge" [class]="customerData.active ? 'active' : 'inactive'">
+            {{ customerData.active ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="profile-title">User Profile</div>
-    <form *ngIf="user" (ngSubmit)="saveProfile()" class="profile-details">
-      <div>
-        <strong>Username:</strong>
-        <span *ngIf="!editMode">{{ user?.username || user?.name || 'N/A' }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedUser.name" name="username" class="form-control form-control-sm" />
-      </div>
-      <div *ngIf="user?.email">
-        <strong>Email:</strong>
-        <span *ngIf="!editMode">{{ user.email }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedUser.email" name="email" class="form-control form-control-sm" />
-      </div>
-      <div *ngIf="user?.first_name">
-        <strong>First Name:</strong>
-        <span *ngIf="!editMode">{{ user.first_name }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedUser.first_name" name="first_name" class="form-control form-control-sm" />
-      </div>
-      <div *ngIf="user?.last_name">
-        <strong>Last Name:</strong>
-        <span *ngIf="!editMode">{{ user.last_name }}</span>
-        <input *ngIf="editMode" [(ngModel)]="editedUser.last_name" name="last_name" class="form-control form-control-sm" />
-      </div>
-      <div *ngIf="user?.role">
-        <strong>Role:</strong>
-        <span *ngIf="!editMode">{{ user.role }}</span>
-        <select *ngIf="editMode" [(ngModel)]="editedUser.role" name="role" class="form-select form-select-sm">
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      <div *ngIf="user?.created_at">
-        <strong>Created At:</strong> {{ user.created_at | date:'medium' }}
-      </div>
-      <div *ngIf="user?.updated_at">
-        <strong>Updated At:</strong> {{ user.updated_at | date:'medium' }}
-      </div>
-      <div *ngIf="user?.id">
-        <strong>ID:</strong> {{ user.id }}
-      </div>
-      <div class="mt-3 w-100 d-flex justify-content-end" *ngIf="!editMode">
-        <button type="button" class="btn btn-outline-light btn-sm" (click)="enableEdit()">Edit</button>
-      </div>
-      <div class="mt-3 w-100 d-flex justify-content-end gap-2" *ngIf="editMode">
-        <button type="submit" class="btn btn-primary btn-sm">Save</button>
-        <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
-      </div>
-    </form>
+
+    <div class="profile-details">
+      <form *ngIf="customerData" (ngSubmit)="saveProfile()" class="customer-form">
+        <div class="form-section">
+          <h4>Personal Information</h4>
+          
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <span *ngIf="!editMode" class="form-value">{{ customerData.first_name }}</span>
+            <input 
+              *ngIf="editMode" 
+              id="firstName"
+              type="text"
+              [(ngModel)]="editedCustomer.first_name" 
+              name="first_name" 
+              class="form-control"
+              placeholder="Enter your first name"
+              required />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <span *ngIf="!editMode" class="form-value">{{ customerData.last_name }}</span>
+            <input 
+              *ngIf="editMode" 
+              id="lastName"
+              type="text"
+              [(ngModel)]="editedCustomer.last_name" 
+              name="last_name" 
+              class="form-control"
+              placeholder="Enter your last name"
+              required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <span *ngIf="!editMode" class="form-value">{{ customerData.email }}</span>
+            <input 
+              *ngIf="editMode" 
+              id="email"
+              type="email"
+              [(ngModel)]="editedCustomer.email" 
+              name="email" 
+              class="form-control"
+              placeholder="Enter your email address"
+              required />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Account Information</h4>
+          
+          <div class="form-group">
+            <label>Customer ID</label>
+            <span class="form-value readonly">{{ customerData.customer_id }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Account Status</label>
+            <span class="form-value readonly">
+              <span class="status-badge" [class]="customerData.active ? 'active' : 'inactive'">
+                {{ customerData.active ? 'Active' : 'Inactive' }}
+              </span>
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Member Since</label>
+            <span class="form-value readonly">{{ customerData.create_date | date:'fullDate' }}</span>
+          </div>
+
+          <div class="form-group">
+            <label>Last Updated</label>
+            <span class="form-value readonly">{{ customerData.last_update | date:'medium' }}</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <div *ngIf="!editMode && isCurrentUser" class="action-buttons">
+            <button type="button" class="btn btn-primary" (click)="enableEdit()">
+              <span class="btn-icon">✏️</span>
+              Edit Profile
+            </button>
+          </div>
+
+          <div *ngIf="editMode" class="action-buttons">
+            <button type="submit" class="btn btn-success" [disabled]="loading">
+              <span *ngIf="loading" class="spinner"></span>
+              <span class="btn-icon" *ngIf="!loading">💾</span>
+              {{ loading ? 'Saving...' : 'Save Changes' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()" [disabled]="loading">
+              <span class="btn-icon">❌</span>
+              Cancel
+            </button>
+          </div>
+
+          <div *ngIf="!isCurrentUser" class="readonly-notice">
+            <p>You can only edit your own profile.</p>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

@@ -58,36 +58,57 @@
     <p>Loading inventory data...</p>
   </div>
 
-  <!-- Inventory Results -->
+  <!-- Inventory Results Table -->
   <div *ngIf="!loading && inventoryData.length > 0" class="inventory-results">
     <div class="results-header">
       <h3>📋 Inventory Results ({{ inventoryData.length }} films)</h3>
     </div>
 
-    <!-- Film Inventory Display -->
-    <div class="inventory-cards">
-      <div *ngFor="let item of inventoryData" class="inventory-card film-group">
-        <div class="card-header">
-          <h4>🎬 {{ item.film?.title || item.film_title }}</h4>
-          <span class="total-count">{{ item.total_inventory_count || item.total_copies }} copies</span>
-        </div>
-        <div class="card-body">
-          <div class="film-details">
-            <span class="detail"><strong>Year:</strong> {{ item.film?.release_year || item.release_year }}</span>
-            <span class="detail"><strong>Rating:</strong> {{ item.film?.rating || item.rating }}</span>
-            <span class="detail"><strong>Stores:</strong> {{ item.stores_count }} stores</span>
-          </div>
-          <div class="film-description">
-            <p><strong>Description:</strong> {{ item.film?.description || item.description }}</p>
-          </div>
-          <div *ngIf="item.stores" class="store-breakdown">
-            <h5>🏪 Store Distribution:</h5>
-            <div *ngFor="let store of item.stores" class="store-item">
-              <span>{{ store.store_name }}: {{ store.count }} copies</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="table-container">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Film Title</th>
+            <th>Year</th>
+            <th>Rating</th>
+            <th>Description</th>
+            <th>Total Copies</th>
+            <th>Stores</th>
+            <th>Store Distribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of inventoryData">
+            <td class="film-title">
+              <div class="title-cell">
+                🎬 {{ item.film?.title || item.film_title }}
+              </div>
+            </td>
+            <td class="film-year">{{ item.film?.release_year || item.release_year }}</td>
+            <td class="film-rating">
+              <span class="rating-badge">{{ item.film?.rating || item.rating }}</span>
+            </td>
+            <td class="film-description">
+              <div class="description-text">{{ (item.film?.description || item.description) | slice:0:100 }}{{ (item.film?.description || item.description)?.length > 100 ? '...' : '' }}</div>
+            </td>
+            <td class="total-copies">
+              <span class="copies-count">{{ item.total_inventory_count || item.total_copies }}</span>
+            </td>
+            <td class="stores-count">{{ item.stores_count }}</td>
+            <td class="store-distribution">
+              <div *ngIf="item.stores && item.stores.length > 0" class="store-breakdown">
+                <div *ngFor="let store of item.stores" class="store-item">
+                  <span class="store-name">{{ store.store_name }}:</span>
+                  <span class="store-count">{{ store.count }}</span>
+                </div>
+              </div>
+              <div *ngIf="!item.stores || item.stores.length === 0" class="no-stores">
+                No store data
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

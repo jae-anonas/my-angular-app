@@ -26,10 +26,34 @@ export class InventoryComponent implements OnInit {
     { id: 2, name: 'Store 2' }
   ];
 
+  // Add inventory modal
+  showAddInventoryModal = false;
+  addingInventory = false;
+  films: any[] = [];
+  newInventory = {
+    film_id: null,
+    store_id: null,
+    quantity: 1
+  };
+
   constructor(private filmService: FilmService) {}
 
   ngOnInit(): void {
     this.loadInventoryData();
+    this.loadFilms();
+  }
+
+  loadFilms(): void {
+    // Load films for the add inventory dropdown
+    this.filmService.getFilms(1, 100).subscribe({
+      next: (response) => {
+        this.films = response.films || [];
+      },
+      error: (error) => {
+        console.error('Error loading films:', error);
+        this.films = [];
+      }
+    });
   }
 
   loadInventoryData(): void {
@@ -78,6 +102,55 @@ export class InventoryComponent implements OnInit {
     this.selectedCategory = '';
     this.selectedStoreId = null;
     this.loadInventoryData();
+  }
+
+  // Add inventory methods
+  openAddInventoryModal(): void {
+    this.showAddInventoryModal = true;
+    this.resetNewInventory();
+  }
+
+  closeAddInventoryModal(): void {
+    this.showAddInventoryModal = false;
+    this.resetNewInventory();
+  }
+
+  resetNewInventory(): void {
+    this.newInventory = {
+      film_id: null,
+      store_id: null,
+      quantity: 1
+    };
+  }
+
+  addInventory(): void {
+    if (!this.newInventory.film_id || !this.newInventory.store_id || this.newInventory.quantity < 1) {
+      alert('Please fill in all required fields with valid values.');
+      return;
+    }
+
+    this.addingInventory = true;
+
+    const inventoryData = {
+      film_id: Number(this.newInventory.film_id),
+      store_id: Number(this.newInventory.store_id),
+      quantity: this.newInventory.quantity
+    };
+
+    this.filmService.addInventory(inventoryData).subscribe({
+      next: (response) => {
+        console.log('Inventory added successfully:', response);
+        this.addingInventory = false;
+        this.closeAddInventoryModal();
+        this.loadInventoryData(); // Refresh the inventory data
+        alert('Inventory added successfully!');
+      },
+      error: (error) => {
+        console.error('Error adding inventory:', error);
+        this.addingInventory = false;
+        alert('Failed to add inventory. Please try again.');
+      }
+    });
   }
 
   private getMockInventoryData(): any[] {

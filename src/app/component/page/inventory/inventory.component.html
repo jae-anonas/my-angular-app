@@ -1,7 +1,14 @@
 <div class="inventory-container">
   <div class="inventory-header">
-    <h2>📦 Film Inventory Management</h2>
-    <p class="inventory-description">Track and manage film inventory across stores</p>
+    <div class="header-content">
+      <h2>📦 Film Inventory Management</h2>
+      <p class="inventory-description">Track and manage film inventory across stores</p>
+    </div>
+    <div class="header-actions">
+      <button class="add-inventory-btn" (click)="openAddInventoryModal()">
+        ➕ Add Inventory
+      </button>
+    </div>
   </div>
 
   <!-- Search and Filter Controls -->
@@ -89,5 +96,79 @@
     <div class="no-results-icon">📭</div>
     <h3>No inventory data found</h3>
     <p>Try adjusting your search criteria or filters</p>
+  </div>
+
+  <!-- Add Inventory Modal -->
+  <div *ngIf="showAddInventoryModal" class="modal-overlay" (click)="closeAddInventoryModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>➕ Add New Inventory</h3>
+        <button class="close-btn" (click)="closeAddInventoryModal()">✖️</button>
+      </div>
+      
+      <div class="modal-body">
+        <form (ngSubmit)="addInventory()" #addInventoryForm="ngForm">
+          <div class="form-group">
+            <label for="filmSelect">🎬 Select Film *</label>
+            <select 
+              id="filmSelect" 
+              [(ngModel)]="newInventory.film_id" 
+              name="film_id" 
+              class="form-control" 
+              required>
+              <option value="">Choose a film...</option>
+              <option *ngFor="let film of films" [value]="film.film_id">
+                {{ film.title }} ({{ film.release_year }})
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="storeSelect">🏪 Select Store *</label>
+            <select 
+              id="storeSelect" 
+              [(ngModel)]="newInventory.store_id" 
+              name="store_id" 
+              class="form-control" 
+              required>
+              <option value="">Choose a store...</option>
+              <option *ngFor="let store of stores" [value]="store.id">
+                {{ store.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">📦 Quantity *</label>
+            <input 
+              type="number" 
+              id="quantity" 
+              [(ngModel)]="newInventory.quantity" 
+              name="quantity" 
+              class="form-control" 
+              min="1" 
+              max="100" 
+              required>
+          </div>
+
+          <div class="modal-actions">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="addingInventory || addInventoryForm.invalid">
+              <span *ngIf="addingInventory">⏳ Adding...</span>
+              <span *ngIf="!addingInventory">✅ Add Inventory</span>
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="closeAddInventoryModal()" 
+              [disabled]="addingInventory">
+              ❌ Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

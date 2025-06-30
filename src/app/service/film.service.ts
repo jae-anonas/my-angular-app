@@ -74,4 +74,28 @@ export class FilmService {
 
     return this.http.get<any>(API_ENDPOINTS.INVENTORY + 'search', { params: httpParams });
   }
+
+  // Add inventory item
+  addInventory(inventoryData: {
+    film_id: number;
+    store_id: number;
+    quantity?: number;
+  }) {
+    return this.http.post<any>(API_ENDPOINTS.INVENTORY + 'create', inventoryData);
+  }
+
+  // Update inventory quantity
+  updateInventory(inventoryData: {
+    inventory_id: number;
+    film_id?: number;
+    store_id?: number;
+    quantity?: number;
+  }) {
+    return this.http.put<any>(API_ENDPOINTS.INVENTORY + 'update', inventoryData);
+  }
+
+  // Remove inventory item
+  removeInventory(inventoryId: number) {
+    return this.http.delete<any>(API_ENDPOINTS.INVENTORY + `remove/${inventoryId}`);
+  }
 }

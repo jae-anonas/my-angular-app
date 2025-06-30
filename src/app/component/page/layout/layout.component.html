@@ -7,6 +7,7 @@
     <ul class="navbar-links navbar-links-left">
       <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
       <li><a routerLink="/films" routerLinkActive="active">Films</a></li>
+      <li *ngIf="!isAdmin"><a routerLink="/active-rentals" routerLinkActive="active">My Rentals</a></li>
       <li *ngIf="isAdmin"><a routerLink="/user-list" routerLinkActive="active">Accounts</a></li>
       <li *ngIf="isAdmin"><a routerLink="/inventory" routerLinkActive="active">Inventory</a></li>
       <li *ngIf="isAdmin"><a routerLink="/add-film" routerLinkActive="active">Add Film</a></li>

@@ -11,6 +11,7 @@ import { AuthGuard } from './service/auth.guard';
 import { FilmDetailsComponent } from './component/page/film-details/film-details.component';
 import { InventoryComponent } from './component/page/inventory/inventory.component';
 import { AddFilmComponent } from './component/page/add-film/add-film.component';
+import { ActiveRentalsComponent } from './component/page/active-rentals/active-rentals.component';
 
 export const routes: Routes = [
     {
@@ -50,6 +51,10 @@ export const routes: Routes = [
             {
                 path: 'cart',
                 component: CartComponent
+            },
+            {
+                path: 'active-rentals',
+                component: ActiveRentalsComponent
             },
             {
                 path: 'film/:id',

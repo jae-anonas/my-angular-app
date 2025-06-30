@@ -1,0 +1,338 @@
+.active-rentals-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.rentals-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  
+  .rentals-description {
+    font-size: 1.1rem;
+    color: #b0b0b0;
+    margin: 0;
+  }
+}
+
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #404040;
+    border-top: 4px solid #4a9eff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  
+  p {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #ffb4b4;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    
+    &.btn-primary {
+      background: linear-gradient(135deg, #4a9eff, #0066cc);
+      color: white;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
+      }
+    }
+  }
+}
+
+.no-rentals {
+  text-align: center;
+  padding: 4rem 2rem;
+  
+  .no-rentals-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #4a9eff, #0066cc);
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
+      text-decoration: none;
+      color: white;
+    }
+  }
+}
+
+.rentals-content {
+  .rentals-summary {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    
+    h3 {
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+    
+    p {
+      color: #b0b0b0;
+      margin: 0;
+    }
+  }
+}
+
+.rental-cards {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.rental-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  .rental-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #404040;
+    
+    .film-info {
+      flex: 1;
+      
+      .film-title {
+        color: #fff;
+        font-size: 1.3rem;
+        margin: 0 0 0.5rem 0;
+      }
+      
+      .film-meta {
+        color: #b0b0b0;
+        font-size: 0.9rem;
+        
+        span {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+    
+    .rental-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      min-width: 120px;
+      
+      &.active {
+        background: #4CAF50;
+        color: white;
+      }
+      
+      &.overdue {
+        background: #f44336;
+        color: white;
+      }
+      
+      &.returned {
+        background: #757575;
+        color: white;
+      }
+    }
+  }
+  
+  .rental-body {
+    .film-description {
+      margin-bottom: 1.5rem;
+      
+      p {
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin: 0;
+      }
+    }
+    
+    .rental-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 0.75rem;
+      
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #333;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .label {
+          color: #b0b0b0;
+          font-weight: 600;
+        }
+        
+        .value {
+          color: #e0e0e0;
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+
+.pagination-nav {
+  margin-top: 2rem;
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    .page-item {
+      .page-link {
+        background: #2a2a2a;
+        border: 1px solid #404040;
+        color: #e0e0e0;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        
+        &:hover:not(:disabled) {
+          background: #4a9eff;
+          color: white;
+          transform: translateY(-1px);
+        }
+        
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+      
+      &.active .page-link {
+        background: #4a9eff;
+        color: white;
+      }
+      
+      &.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+        
+        &:hover {
+          background: #2a2a2a;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .active-rentals-container {
+    padding: 1rem;
+  }
+  
+  .rental-card {
+    .rental-header {
+      flex-direction: column;
+      gap: 1rem;
+      
+      .rental-status {
+        min-width: auto;
+        width: 100%;
+      }
+    }
+    
+    .rental-details {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+  }
+}

@@ -1,154 +1,387 @@
 <div class="film-details-container" *ngIf="film">
-  <div class="film-details-card enhanced">
-    <button type="button" class="toggle-edit-btn" *ngIf="isAdmin" (click)="toggleEdit()">{{ editable ? 'Cancel' : 'Edit' }}</button>
-    <form *ngIf="editable && isAdmin" (ngSubmit)="onSave()" #filmForm="ngForm">
-      <div class="film-details-header">
-        <input class="film-details-title-input" name="title" [(ngModel)]="film.title" required #title="ngModel" />
-        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="validation-error">Title is required.</div>
-        <div class="film-details-meta">
-          <input class="meta-year-input" type="number" name="release_year" [(ngModel)]="film.release_year" required #releaseYear="ngModel" />
-          <span class="meta-dot">•</span>
-          <input class="meta-rating-input" name="rating" [(ngModel)]="film.rating" required #rating="ngModel" />
-          <span class="meta-dot">•</span>
-          <span class="meta-categories">
-            <ng-container *ngIf="film.categories?.length; else noCategories">
-              <ng-container *ngFor="let cat of film.categories; let i = index">
-                <input class="meta-category-input" [(ngModel)]="film.categories[i].name" name="category{{i}}" required #catName="ngModel" />
-                <span *ngIf="i < film.categories.length - 1">, </span>
-                <div *ngIf="catName.invalid && (catName.dirty || catName.touched)" class="validation-error">Category is required.</div>
-              </ng-container>
-            </ng-container>
-            <ng-template #noCategories>
-              <span class="no-categories">No categories</span>
-            </ng-template>
-          </span>
+  <!-- Success/Error Messages -->
+  <div *ngIf="saveSuccess" class="alert alert-success">
+    <span class="icon-check"></span>
+    Film updated successfully!
+  </div>
+  <div *ngIf="saveError" class="alert alert-error">
+    <span class="icon-alert"></span>
+    {{ saveError }}
+  </div>
+
+  <!-- Film Header -->
+  <div class="film-header">
+    <div class="film-info">
+      <h1>{{ film.title }}</h1>
+      <div class="film-meta">
+        <span class="year">{{ film.release_year }}</span>
+        <span class="rating">{{ film.rating }}</span>
+        <span class="duration">{{ film.length }} min</span>
+        <span class="categories">
+          <ng-container *ngIf="film.categories?.length; else noCategories">
+            {{ getCategoriesString() }}
+          </ng-container>
+          <ng-template #noCategories>
+            <span class="no-categories">No categories</span>
+          </ng-template>
+        </span>
+      </div>
+    </div>
+    
+    <div class="admin-controls" *ngIf="isAdmin">
+      <div class="edit-actions">
+        <button type="button" class="btn btn-primary" (click)="openEditModal()">
+          <span class="icon-edit"></span>
+          Edit Film
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Film Details Grid -->
+  <div class="film-details-grid">
+    <div class="details-section">
+      <h3>Film Details</h3>
+      
+      <div class="detail-item">
+        <label>Description</label>
+        <p>{{ film.description }}</p>
+      </div>
+      
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Rental Rate</label>
+          <span>${{ film.rental_rate }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Rental Duration</label>
+          <span>{{ film.rental_duration }} days</span>
         </div>
       </div>
-      <div class="film-details-body">
-        <div class="film-details-info-grid">
-          <div>
-            <strong>Description:</strong>
-            <textarea id="film-description" class="film-details-description-input" name="description" [(ngModel)]="film.description" required #description="ngModel"></textarea>
-          </div>
-          <div *ngIf="description.invalid && (description.dirty || description.touched)" class="validation-error">Description is required.</div>
-          <div><strong>Length:</strong> <input type="number" name="length" [(ngModel)]="film.length" required #length="ngModel" /> min
-            <div *ngIf="length.invalid && (length.dirty || length.touched)" class="validation-error">Length is required.</div>
-          </div>
-          <div><strong>Rental Rate:</strong> $<input type="number" name="rental_rate" [(ngModel)]="film.rental_rate" required #rentalRate="ngModel" />
-            <div *ngIf="rentalRate.invalid && (rentalRate.dirty || rentalRate.touched)" class="validation-error">Rental rate is required.</div>
-          </div>
-          <div><strong>Language:</strong> <input name="language" [(ngModel)]="film.language" required #language="ngModel" />
-            <div *ngIf="language.invalid && (language.dirty || language.touched)" class="validation-error">Language is required.</div>
-          </div>
-          <div><strong>Special Features:</strong> <input name="special_features" [(ngModel)]="film.special_features" />
-          </div>
-          <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
+      
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Language</label>
+          <span>{{ film.language }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Special Features</label>
+          <span>{{ film.special_features || 'None' }}</span>
         </div>
       </div>
-      <button type="submit" [disabled]="filmForm.invalid" class="save-btn">Save</button>
-      <div *ngIf="saveSuccess" class="success-message">Film updated successfully!</div>
-      <div *ngIf="saveError" class="error-message">Error: {{ saveError }}</div>
-    </form>
-    <ng-container *ngIf="!editable">
-      <div class="film-details-header">
-        <div class="film-details-title">{{ film.title }}</div>
-        <div class="film-details-meta">
-          <span class="meta-year">{{ film.release_year }}</span>
-          <span class="meta-dot">•</span>
-          <span class="meta-rating">{{ film.rating }}</span>
-          <span class="meta-dot">•</span>
-          <span class="meta-categories">
-            <ng-container *ngIf="film.categories?.length; else noCategoriesView">
-              <ng-container *ngFor="let cat of film.categories; let last = last">
-                {{ cat.name }}<span *ngIf="!last">, </span>
-              </ng-container>
-            </ng-container>
-            <ng-template #noCategoriesView>
-              <span class="no-categories">No categories</span>
-            </ng-template>
-          </span>
-        </div>
+      
+      <div class="detail-item">
+        <label>Last Updated</label>
+        <span>{{ film.last_update | date:'medium' }}</span>
       </div>
-      <div class="film-details-body">
-        <div class="film-details-info-grid">
-          <div><strong>Description:</strong> <span>{{ film.description }}</span></div>
-          <div><strong>Length:</strong> <span>{{ film.length }} min</span></div>
-          <div><strong>Rental Rate:</strong> <span>${{ film.rental_rate }}</span></div>
-          <div><strong>Language:</strong> <span>{{ film.language }}</span></div>
-          <div><strong>Special Features:</strong> <span>{{ film.special_features }}</span></div>
-          <div><strong>Last Update:</strong> <span>{{ film.last_update | date:'medium' }}</span></div>
+    </div>
+
+    <!-- Inventory and Cart Section -->
+    <div class="details-section">
+      <h3>Availability</h3>
+      
+      <!-- Store-specific availability for non-admin users -->
+      <div *ngIf="!isAdmin" class="user-store-availability">
+        <div *ngIf="loadingAvailability" class="loading-availability">
+          Checking availability in your store...
+        </div>
+        <div *ngIf="!loadingAvailability && availabilityData" class="user-store-info">
+          <div class="store-availability-header">
+            <span class="store-name">Your Store (ID: {{ availabilityData.store.store_id }})</span>
+          </div>
+          <div class="availability-details">
+            <div class="availability-status" [class]="availabilityData.availability.is_available ? 'available' : 'unavailable'">
+              <span class="status-text">
+                {{ availabilityData.availability.is_available ? '✅ Available' : '❌ Not Available' }}
+              </span>
+            </div>
+            <div class="copy-counts">
+              <span class="available-count">{{ availabilityData.availability.available_copies }} available</span>
+              <span class="total-count">of {{ availabilityData.availability.total_copies }} total</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!loadingAvailability && !availabilityData" class="no-store-info">
+          Unable to check availability in your store
         </div>
       </div>
 
-      <!-- Inventory and Cart Section -->
-      <div class="inventory-cart-section">
-        <div class="inventory-info">
-          <h3>🏪 Availability</h3>
-          
-          <!-- Store-specific availability for non-admin users -->
-          <div *ngIf="!isAdmin" class="user-store-availability">
-            <div *ngIf="loadingAvailability" class="loading-availability">
-              Checking availability in your store...
-            </div>
-            <div *ngIf="!loadingAvailability && availabilityData" class="user-store-info">
-              <div class="store-availability-header">
-                <span class="store-name">Your Store (ID: {{ availabilityData.store.store_id }})</span>
-              </div>
-              <div class="availability-details">
-                <div class="availability-status" [class]="availabilityData.availability.is_available ? 'available' : 'unavailable'">
-                  <span class="status-text">
-                    {{ availabilityData.availability.is_available ? '✅ Available' : '❌ Not Available' }}
-                  </span>
-                </div>
-                <div class="copy-counts">
-                  <span class="available-count">{{ availabilityData.availability.available_copies }} available</span>
-                  <span class="total-count">of {{ availabilityData.availability.total_copies }} total</span>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="!loadingAvailability && !availabilityData" class="no-store-info">
-              Unable to check availability in your store
-            </div>
+      <!-- General inventory for admin users -->
+      <div *ngIf="isAdmin" class="general-inventory">
+        <div *ngIf="inventoryData.length > 0" class="inventory-stores">
+          <div *ngFor="let store of inventoryData" class="store-availability">
+            <span class="store-name">Store {{ store.store_id || store.store_name }}</span>
+            <span class="availability-count" [class]="(store.copies_count) > 0 ? 'available' : 'unavailable'">
+              {{ store.copies_count || 0 }} available
+            </span>
           </div>
+          <div class="total-availability">
+            <strong>Total Available: {{ totalAvailable }} copies</strong>
+          </div>
+        </div>
+        <div *ngIf="inventoryData.length === 0" class="no-inventory">
+          No inventory information available
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Action Buttons for Non-Admin Users -->
+  <div class="action-buttons" *ngIf="!isAdmin">
+    <h4>Actions</h4>
+    <div class="button-group">
+      <button 
+        class="btn btn-primary btn-large" 
+        (click)="addToCart()" 
+        [disabled]="loadingAvailability || !isAvailableInUserStore"
+        [class.disabled]="loadingAvailability || !isAvailableInUserStore">
+        <span class="icon-cart"></span>
+        <span *ngIf="!loadingAvailability">
+          {{ isAvailableInUserStore ? 'Add to Cart' : 'Not Available in Your Store' }}
+        </span>
+        <span *ngIf="loadingAvailability">Checking...</span>
+      </button>
+    </div>
+    <div class="rental-info">
+      <small>Rental Rate: ${{ film.rental_rate }} per day</small>
+    </div>
+  </div>
+</div>
 
-          <!-- General inventory for admin users -->
-          <div *ngIf="isAdmin" class="general-inventory">
-            <div *ngIf="inventoryData.length > 0" class="inventory-stores">
-              <div *ngFor="let store of inventoryData" class="store-availability">
-                <span class="store-name">Store {{ store.store_id || store.store_name }}</span>
-                <span class="availability-count" [class]="(store.copies_count) > 0 ? 'available' : 'unavailable'">
-                  {{ store.copies_count || 0 }} available
-                </span>
-              </div>
-              <div class="total-availability">
-                <strong>Total Available: {{ totalAvailable }} copies</strong>
-              </div>
-            </div>
-            <div *ngIf="inventoryData.length === 0" class="no-inventory">
-              No inventory information available
-            </div>
+<!-- Loading State -->
+<div *ngIf="loading" class="film-details-container">
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading film details...</p>
+  </div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="!film && !loading" class="film-details-container">
+  <div class="alert alert-error">
+    <span class="icon-alert"></span>
+    Film not found.
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Edit Film</h2>
+      <button type="button" class="btn-close" (click)="closeEditModal()">
+        <span class="icon-close"></span>
+      </button>
+    </div>
+    
+    <form (ngSubmit)="onUpdateFilm()" #editForm="ngForm" class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Title *</label>
+          <input 
+            type="text" 
+            id="title"
+            name="title" 
+            class="form-input"
+            [(ngModel)]="editedFilm.title" 
+            required 
+            #title="ngModel" />
+          <div *ngIf="title.invalid && (title.dirty || title.touched)" class="validation-error">
+            Title is required.
           </div>
         </div>
         
-        <div class="cart-actions" *ngIf="!isAdmin">
-          <button 
-            class="add-to-cart-btn" 
-            (click)="addToCart()" 
-            [disabled]="loadingAvailability || !isAvailableInUserStore"
-            [class.disabled]="loadingAvailability || !isAvailableInUserStore">
-            <span class="cart-icon">🛒</span>
-            <span class="cart-text" *ngIf="!loadingAvailability">
-              {{ isAvailableInUserStore ? 'Add to Cart' : 'Not Available in Your Store' }}
-            </span>
-            <span class="cart-text" *ngIf="loadingAvailability">Checking...</span>
-          </button>
-          <div class="rental-info">
-            <small>Rental Rate: ${{ film.rental_rate }} per day</small>
+        <div class="form-group">
+          <label for="release_year">Release Year *</label>
+          <input 
+            type="number" 
+            id="release_year"
+            name="release_year" 
+            class="form-input"
+            [(ngModel)]="editedFilm.release_year" 
+            required 
+            #releaseYear="ngModel" />
+          <div *ngIf="releaseYear.invalid && (releaseYear.dirty || releaseYear.touched)" class="validation-error">
+            Release year is required.
           </div>
         </div>
       </div>
-    </ng-container>
+      
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea 
+          id="description"
+          name="description" 
+          class="form-textarea"
+          [(ngModel)]="editedFilm.description" 
+          required 
+          #description="ngModel"
+          rows="4"></textarea>
+        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="validation-error">
+          Description is required.
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="language_id">Language *</label>
+          <select 
+            id="language_id"
+            name="language_id" 
+            class="form-select"
+            [(ngModel)]="editedFilm.language_id" 
+            required 
+            #language="ngModel">
+            <option value="" disabled>Select a language</option>
+            <option *ngFor="let lang of languageOptions" [value]="lang.language_id">
+              {{ lang.name }}
+            </option>
+          </select>
+          <div *ngIf="language.invalid && (language.dirty || language.touched)" class="validation-error">
+            Language is required.
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="rating">Rating *</label>
+          <select 
+            id="rating"
+            name="rating" 
+            class="form-select"
+            [(ngModel)]="editedFilm.rating" 
+            required 
+            #rating="ngModel">
+            <option value="" disabled>Select a rating</option>
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG-13">PG-13</option>
+            <option value="R">R</option>
+            <option value="NC-17">NC-17</option>
+          </select>
+          <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="validation-error">
+            Rating is required.
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="length">Length (minutes) *</label>
+          <input 
+            type="number" 
+            id="length"
+            name="length" 
+            class="form-input"
+            [(ngModel)]="editedFilm.length" 
+            required 
+            #length="ngModel" />
+          <div *ngIf="length.invalid && (length.dirty || length.touched)" class="validation-error">
+            Length is required.
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="rental_duration">Rental Duration (days) *</label>
+          <input 
+            type="number" 
+            id="rental_duration"
+            name="rental_duration" 
+            class="form-input"
+            [(ngModel)]="editedFilm.rental_duration" 
+            required 
+            #rentalDuration="ngModel" />
+          <div *ngIf="rentalDuration.invalid && (rentalDuration.dirty || rentalDuration.touched)" class="validation-error">
+            Rental duration is required.
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="rental_rate">Rental Rate ($) *</label>
+          <input 
+            type="number" 
+            id="rental_rate"
+            name="rental_rate" 
+            class="form-input"
+            step="0.01"
+            [(ngModel)]="editedFilm.rental_rate" 
+            required 
+            #rentalRate="ngModel" />
+          <div *ngIf="rentalRate.invalid && (rentalRate.dirty || rentalRate.touched)" class="validation-error">
+            Rental rate is required.
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="replacement_cost">Replacement Cost ($) *</label>
+          <input 
+            type="number" 
+            id="replacement_cost"
+            name="replacement_cost" 
+            class="form-input"
+            step="0.01"
+            [(ngModel)]="editedFilm.replacement_cost" 
+            required 
+            #replacementCost="ngModel" />
+          <div *ngIf="replacementCost.invalid && (replacementCost.dirty || replacementCost.touched)" class="validation-error">
+            Replacement cost is required.
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="categories">Categories</label>
+        <select 
+          id="categories"
+          name="categories" 
+          class="form-select"
+          [(ngModel)]="selectedCategories" 
+          multiple 
+          #categories="ngModel">
+          <option *ngFor="let cat of categoryOptions" [value]="cat.category_id">
+            {{ cat.name }}
+          </option>
+        </select>
+        <small class="form-help">Hold Ctrl/Cmd to select multiple categories</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="special_features">Special Features</label>
+        <select 
+          id="special_features"
+          name="special_features" 
+          class="form-select"
+          [(ngModel)]="editedFilm.special_features"
+          #specialFeatures="ngModel">
+          <option value="" disabled>Select a feature</option>
+          <option *ngFor="let feature of specialFeaturesOptions" [value]="feature">{{ feature }}</option>
+        </select>
+      </div>
+      
+      <div *ngIf="saveSuccess" class="alert alert-success">
+        <span class="icon-check"></span>
+        Film updated successfully!
+      </div>
+      
+      <div *ngIf="saveError" class="alert alert-error">
+        <span class="icon-alert"></span>
+        {{ saveError }}
+      </div>
+    </form>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeEditModal()">
+        Cancel
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        (click)="onUpdateFilm()"
+        [disabled]="editForm.invalid || loading">
+        <span class="icon-save"></span>
+        {{ loading ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
   </div>
 </div>
-<div *ngIf="loading" class="film-details-loading">Loading...</div>
-<div *ngIf="!film && !loading" class="film-details-error">Film not found.</div>

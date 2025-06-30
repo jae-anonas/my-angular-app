@@ -20,10 +20,17 @@ export class FilmDetailsComponent implements OnInit {
   loading = false;
   saveSuccess = false;
   saveError = '';
-  editable = false;
   isAdmin = false;
   inventoryData: any[] = [];
   totalAvailable = 0;
+  
+  // Edit Modal properties
+  showEditModal = false;
+  editedFilm: any = {};
+  categoryOptions: any[] = [];
+  languageOptions: any[] = [];
+  selectedCategories: number[] = [];
+  specialFeaturesOptions: string[] = ['Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'];
   
   // Availability properties
   availabilityData: FilmAvailabilityResponse | null = null;
@@ -38,6 +45,7 @@ export class FilmDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.checkUserRole();
+    this.loadFormOptions();
     const filmId = this.route.snapshot.paramMap.get('id');
     if (filmId) {
       this.loading = true;
@@ -64,6 +72,13 @@ export class FilmDetailsComponent implements OnInit {
     }
   }
 
+  loadFormOptions() {
+    if (this.isAdmin) {
+      this.filmService.getCategoryOptions().subscribe(opts => this.categoryOptions = opts);
+      this.filmService.getLanguageOptions().subscribe(opts => this.languageOptions = opts);
+    }
+  }
+
   calculateTotalAvailable() {
     this.totalAvailable = this.inventoryData.reduce((total, store) => {
       return total + (store.available_count || store.total_inventory_count || 0);
@@ -78,26 +93,80 @@ export class FilmDetailsComponent implements OnInit {
     }
   }
 
-  toggleEdit() {
-    if (!this.isAdmin) {
-      return; // Prevent non-admin users from editing
+  openEditModal() {
+    if (!this.isAdmin || !this.film) {
+      return;
     }
-    this.editable = !this.editable;
+    
+    // Initialize edit form with current film data
+    this.editedFilm = {
+      film_id: this.film.film_id,
+      title: this.film.title,
+      description: this.film.description,
+      release_year: this.film.release_year,
+      language_id: this.film.language_id,
+      rental_duration: this.film.rental_duration,
+      rental_rate: this.film.rental_rate,
+      replacement_cost: this.film.replacement_cost,
+      rating: this.film.rating,
+      length: this.film.length,
+      special_features: this.film.special_features
+    };
+    
+    // Set selected categories
+    this.selectedCategories = this.film.categories?.map(cat => cat.category_id) || [];
+    
+    this.showEditModal = true;
     this.saveSuccess = false;
     this.saveError = '';
   }
 
-  onSave() {
-    console.log('Saving film:', this.film);
-    if (!this.film) return;
-    this.filmService.updateFilm(this.film).subscribe({
-      next: () => {
-        this.saveSuccess = true;
-        this.saveError = '';
+  closeEditModal() {
+    this.showEditModal = false;
+    this.editedFilm = {};
+    this.selectedCategories = [];
+    this.saveSuccess = false;
+    this.saveError = '';
+  }
+
+  onUpdateFilm() {
+    if (!this.editedFilm || !this.isAdmin) return;
+    
+    // Add selected categories to the film data
+    this.editedFilm.categories = this.selectedCategories;
+    
+    this.loading = true;
+    this.filmService.updateFilm(this.editedFilm).subscribe({
+      next: (response) => {
+        // Refresh the film data
+        const filmId = this.route.snapshot.paramMap.get('id');
+        if (filmId) {
+          this.filmService.getFilmById(filmId).subscribe({
+            next: (res) => {
+              this.film = res.film || res;
+              if (res.inventory || res.film?.inventory) {
+                this.inventoryData = res.inventory || res.film?.inventory || [];
+                this.calculateTotalAvailable();
+              }
+              this.loading = false;
+              this.saveSuccess = true;
+              this.saveError = '';
+              
+              // Auto-close modal after success
+              setTimeout(() => {
+                this.closeEditModal();
+              }, 2000);
+            },
+            error: () => {
+              this.loading = false;
+            }
+          });
+        }
       },
       error: (err) => {
         this.saveSuccess = false;
         this.saveError = err?.error?.message || 'Failed to update film.';
+        this.loading = false;
       }
     });
   }
@@ -139,5 +208,12 @@ export class FilmDetailsComponent implements OnInit {
         this.loadingAvailability = false;
       }
     });
+  }
+
+  getCategoriesString(): string {
+    if (!this.film?.categories || this.film.categories.length === 0) {
+      return 'No categories';
+    }
+    return this.film.categories.map(cat => cat.name).join(', ');
   }
 }

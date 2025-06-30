@@ -111,3 +111,55 @@
     </div>
   </div>
 </div>
+
+<!-- Return Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showReturnConfirmModal" (click)="cancelReturn()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>🔄 Confirm Return</h3>
+      <button class="close-btn" (click)="cancelReturn()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirmation-content" *ngIf="selectedRental">
+        <div class="confirmation-icon">📋</div>
+        <p class="confirmation-text">
+          Are you sure you want to return <strong>"{{ selectedRental.inventory.film.title }}"</strong> 
+          for <strong>{{ selectedRental.customer.first_name }} {{ selectedRental.customer.last_name }}</strong>?
+        </p>
+        <div class="rental-details">
+          <div class="detail-item">
+            <span class="label">Rental ID:</span>
+            <span class="value">#{{ selectedRental.rental_id }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Rental Date:</span>
+            <span class="value">{{ selectedRental.rental_date | date:'short' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Days Rented:</span>
+            <span class="value">{{ getDaysRented(selectedRental.rental_date) }} days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cancelReturn()">Cancel</button>
+      <button class="btn btn-danger" (click)="confirmReturn()">
+        <span class="btn-icon">🔄</span>
+        Confirm Return
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-popup" *ngIf="showSuccessMessage" [@slideIn]>
+  <div class="success-content">
+    <div class="success-icon">✅</div>
+    <div class="success-text">
+      <h4>Return Successful!</h4>
+      <p>{{ successMessage }}</p>
+    </div>
+    <button class="close-success-btn" (click)="closeSuccessMessage()">✕</button>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthService } from '../../../service/auth-service.service';
 import { RentalService, ActiveRental, ActiveRentalsResponse, ReturnRentalRequest } from '../../../service/rental.service';
 
@@ -9,7 +10,18 @@ import { RentalService, ActiveRental, ActiveRentalsResponse, ReturnRentalRequest
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './admin-rentals.component.html',
-  styleUrl: './admin-rentals.component.scss'
+  styleUrl: './admin-rentals.component.scss',
+  animations: [
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0 }),
+        animate('300ms ease-in', style({ transform: 'translateX(0)', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ transform: 'translateX(100%)', opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class AdminRentalsComponent implements OnInit {
   rentals: ActiveRental[] = [];
@@ -22,6 +34,12 @@ export class AdminRentalsComponent implements OnInit {
   pageSize = 10;
   totalPages = 0;
   totalRentals = 0;
+
+  // Modal states
+  showReturnConfirmModal = false;
+  showSuccessMessage = false;
+  selectedRental: ActiveRental | null = null;
+  successMessage = '';
 
   private authService = inject(AuthService);
   private rentalService = inject(RentalService);
@@ -53,33 +71,57 @@ export class AdminRentalsComponent implements OnInit {
   }
 
   returnRental(rental: ActiveRental) {
+    this.selectedRental = rental;
+    this.showReturnConfirmModal = true;
+  }
+
+  confirmReturn() {
+    if (!this.selectedRental) return;
+
     const userData = this.authService.userValue;
     // Use staff_id if available, otherwise default to 1 (this should be configurable in a real app)
     const staffId = userData?.staff?.staff_id || 1;
 
-    if (confirm(`Are you sure you want to return "${rental.inventory.film.title}" for ${rental.customer.first_name} ${rental.customer.last_name}?`)) {
-      this.returningRentalId = rental.rental_id;
-      
-      const returnRequest: ReturnRentalRequest = {
-        rental_id: rental.rental_id,
-        staff_id: staffId
-      };
+    this.returningRentalId = this.selectedRental.rental_id;
+    this.showReturnConfirmModal = false;
+    
+    const returnRequest: ReturnRentalRequest = {
+      rental_id: this.selectedRental.rental_id,
+      staff_id: staffId
+    };
 
-      this.rentalService.returnRental(returnRequest).subscribe({
-        next: (response) => {
-          console.log('Rental returned successfully:', response);
-          console.log(`Returned: ${response.rental.film_title} for ${response.rental.customer_name}`);
-          this.returningRentalId = null;
-          // Refresh the current page to show updated data
-          this.loadAllActiveRentals(this.currentPage);
-        },
-        error: (error: any) => {
-          console.error('Error returning rental:', error);
-          this.error = error?.error?.message || 'Failed to return rental.';
-          this.returningRentalId = null;
-        }
-      });
-    }
+    this.rentalService.returnRental(returnRequest).subscribe({
+      next: (response) => {
+        console.log('Rental returned successfully:', response);
+        this.successMessage = `Successfully returned "${response.rental.film_title}" for ${response.rental.customer_name}`;
+        this.showSuccessMessage = true;
+        this.returningRentalId = null;
+        this.selectedRental = null;
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 5000);
+        
+        // Refresh the current page to show updated data
+        this.loadAllActiveRentals(this.currentPage);
+      },
+      error: (error: any) => {
+        console.error('Error returning rental:', error);
+        this.error = error?.error?.message || 'Failed to return rental.';
+        this.returningRentalId = null;
+        this.selectedRental = null;
+      }
+    });
+  }
+
+  cancelReturn() {
+    this.showReturnConfirmModal = false;
+    this.selectedRental = null;
+  }
+
+  closeSuccessMessage() {
+    this.showSuccessMessage = false;
   }
 
   goToPage(page: number) {

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService } from '../../../service/cart.service';
 import { AuthService } from '../../../service/auth-service.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
@@ -18,13 +19,23 @@ export class LayoutComponent implements OnInit {
   cartCount = 0;
   isAdmin = false;
   customerInfo: any = null;
+  isWideContentPage = false;
 
   constructor(private router: Router, private cartService: CartService) {
     this.cartService.cart$.subscribe(items => this.cartCount = items.length);
+    
+    // Listen to route changes to detect admin pages that need wider content
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.checkIfWideContentNeeded(event.url);
+    });
   }
 
   ngOnInit() {
     this.checkUserRole();
+    // Check initial route for wide content
+    this.checkIfWideContentNeeded(this.router.url);
   }
 
   checkUserRole() {
@@ -36,6 +47,16 @@ export class LayoutComponent implements OnInit {
     }
   }
 
+  checkIfWideContentNeeded(url: string) {
+    // Pages that need wider content (admin tables, etc.)
+    const wideContentPages = [
+      '/admin-rentals',
+      '/user-list',
+      '/inventory'
+    ];
+    
+    this.isWideContentPage = wideContentPages.some(page => url.includes(page));
+  }
 
   onProfile() {
     const userData = localStorage.getItem('userData');

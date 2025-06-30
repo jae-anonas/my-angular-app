@@ -430,3 +430,9 @@
   max-width: 900px;
   margin: 0 auto;
 }
+
+// Override for admin pages that need more width
+.main-content.minimal-content.wide-content {
+  max-width: 95%;
+  padding: 2rem 1rem 0 1rem;
+}

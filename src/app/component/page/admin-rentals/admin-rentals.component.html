@@ -1,0 +1,113 @@
+<div class="admin-rentals-container">
+  <div class="rentals-header">
+    <h2>🏢 All Active Rentals</h2>
+    <p class="rentals-description">Manage and track all customer rentals</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading rentals...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Error Loading Rentals</h3>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadAllActiveRentals()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="rentals-content">
+    <div *ngIf="rentals.length === 0" class="no-rentals">
+      <div class="no-rentals-icon">📋</div>
+      <h3>No Active Rentals</h3>
+      <p>There are no active rentals at the moment.</p>
+    </div>
+
+    <div *ngIf="rentals.length > 0" class="rentals-list">
+      <div class="rentals-summary">
+        <h3>{{ totalRentals }} Active Rental{{ totalRentals !== 1 ? 's' : '' }}</h3>
+        <p>Page {{ currentPage }} of {{ totalPages }}</p>
+      </div>
+
+      <div class="table-container">
+        <table class="rentals-table">
+          <thead>
+            <tr>
+              <th>Rental ID</th>
+              <th>Film</th>
+              <th>Customer</th>
+              <th>Rental Date</th>
+              <th>Days Rented</th>
+              <th>Duration</th>
+              <th>Store</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rental of rentals" [class]="getStatusClass(rental)">
+              <td class="rental-id">#{{ rental.rental_id }}</td>
+              <td class="film-info">
+                <div class="film-title">{{ rental.inventory.film.title }}</div>
+                <div class="film-rate">${{ rental.inventory.film.rental_rate }}/day</div>
+              </td>
+              <td class="customer-info">
+                <div class="customer-name">{{ rental.customer.first_name }} {{ rental.customer.last_name }}</div>
+                <div class="customer-email">{{ rental.customer.email }}</div>
+              </td>
+              <td class="rental-date">{{ rental.rental_date | date:'short' }}</td>
+              <td class="days-rented">{{ getDaysRented(rental.rental_date) }} days</td>
+              <td class="rental-duration">{{ rental.inventory.film.rental_duration }} days</td>
+              <td class="store-info">Store #{{ rental.inventory.store.store_id }}</td>
+              <td class="status">
+                <span class="status-badge" [class]="getStatusClass(rental)">
+                  {{ getStatusText(rental) }}
+                </span>
+              </td>
+              <td class="action">
+                <button 
+                  *ngIf="!rental.return_date" 
+                  class="btn btn-return"
+                  [disabled]="returningRentalId === rental.rental_id"
+                  (click)="returnRental(rental)">
+                  <span *ngIf="returningRentalId === rental.rental_id" class="spinner"></span>
+                  {{ returningRentalId === rental.rental_id ? 'Returning...' : 'Return' }}
+                </button>
+                <span *ngIf="rental.return_date" class="returned-text">
+                  Returned on {{ rental.return_date | date:'short' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="pagination-nav" *ngIf="totalPages > 1">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+          </li>
+          <li class="page-item" *ngIf="currentPage > 3">
+            <button class="page-link" (click)="goToPage(1)">1</button>
+          </li>
+          <li class="page-item disabled" *ngIf="currentPage > 4">
+            <span class="page-link">...</span>
+          </li>
+          <li class="page-item" *ngFor="let p of getVisiblePages()" [class.active]="currentPage === p">
+            <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
+          </li>
+          <li class="page-item disabled" *ngIf="currentPage < totalPages - 3">
+            <span class="page-link">...</span>
+          </li>
+          <li class="page-item" *ngIf="currentPage < totalPages - 2">
+            <button class="page-link" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

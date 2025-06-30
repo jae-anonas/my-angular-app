@@ -63,6 +63,22 @@ export interface ActiveRentalsResponse {
   activeRentals: ActiveRental[];
 }
 
+export interface ReturnRentalRequest {
+  rental_id: number;
+  staff_id: number;
+}
+
+export interface ReturnRentalResponse {
+  success: boolean;
+  message: string;
+  rental: {
+    rental_id: number;
+    return_date: string;
+    film_title: string;
+    customer_name: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -91,5 +107,20 @@ export class RentalService {
         pageSize: pageSize.toString()
       }
     });
+  }
+
+  // Get all active rentals for admin (all customers) with pagination
+  getAllActiveRentals(page: number = 1, pageSize: number = 10): Observable<ActiveRentalsResponse> {
+    return this.http.get<ActiveRentalsResponse>(this.apiUrl + 'active', {
+      params: {
+        page: page.toString(),
+        pageSize: pageSize.toString()
+      }
+    });
+  }
+
+  // Return a rental
+  returnRental(rentalData: ReturnRentalRequest): Observable<ReturnRentalResponse> {
+    return this.http.put<ReturnRentalResponse>(this.apiUrl + 'return', rentalData);
   }
 }

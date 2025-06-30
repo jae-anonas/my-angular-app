@@ -12,6 +12,7 @@ import { FilmDetailsComponent } from './component/page/film-details/film-details
 import { InventoryComponent } from './component/page/inventory/inventory.component';
 import { AddFilmComponent } from './component/page/add-film/add-film.component';
 import { ActiveRentalsComponent } from './component/page/active-rentals/active-rentals.component';
+import { AdminRentalsComponent } from './component/page/admin-rentals/admin-rentals.component';
 
 export const routes: Routes = [
     {
@@ -67,6 +68,10 @@ export const routes: Routes = [
             {
                 path: 'add-film',
                 component: AddFilmComponent
+            },
+            {
+                path: 'admin-rentals',
+                component: AdminRentalsComponent
             }
         ]
     }

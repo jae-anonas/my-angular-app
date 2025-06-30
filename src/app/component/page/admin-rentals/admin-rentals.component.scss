@@ -1,0 +1,447 @@
+.admin-rentals-container {
+  padding: 1rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  color: #ffffff;
+  width: 100%;
+  overflow-x: auto; // Allow horizontal scrolling if needed
+
+  .rentals-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .rentals-description {
+      font-size: 1.1rem;
+      color: #a0a0a0;
+      margin: 0;
+    }
+  }
+
+  .loading-state, .error-state, .no-rentals {
+    text-align: center;
+    padding: 3rem;
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #333;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    .error-icon, .no-rentals-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: #a0a0a0;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .rentals-content {
+    .rentals-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+
+      h3 {
+        margin: 0;
+        color: #ffffff;
+      }
+
+      p {
+        margin: 0;
+        color: #a0a0a0;
+      }
+    }
+
+    .table-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow-x: auto; // Enable horizontal scrolling
+      margin-bottom: 2rem;
+      width: 100%;
+
+      .rentals-table {
+        width: 100%;
+        min-width: 1200px; // Ensure minimum width to show all columns
+        border-collapse: collapse;
+        table-layout: fixed; // Fixed layout for better column control
+
+        thead {
+          th {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap; // Prevent text wrapping in headers
+            
+            // Set specific widths for columns
+            &:nth-child(1) { width: 8%; }  // Rental ID
+            &:nth-child(2) { width: 18%; } // Film
+            &:nth-child(3) { width: 15%; } // Customer
+            &:nth-child(4) { width: 12%; } // Rental Date
+            &:nth-child(5) { width: 8%; }  // Days Rented
+            &:nth-child(6) { width: 8%; }  // Duration
+            &:nth-child(7) { width: 8%; }  // Store
+            &:nth-child(8) { width: 12%; } // Status
+            &:nth-child(9) { width: 11%; } // Action
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s ease;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.02);
+            }
+
+            &.overdue {
+              background: rgba(220, 38, 127, 0.1);
+              border-left: 4px solid #dc267f;
+            }
+
+            &.active {
+              background: rgba(46, 213, 115, 0.1);
+              border-left: 4px solid #2ed573;
+            }
+
+            &.returned {
+              background: rgba(116, 116, 116, 0.1);
+              border-left: 4px solid #747474;
+              opacity: 0.7;
+            }
+
+            td {
+              padding: 1rem;
+              color: #ffffff;
+              vertical-align: top;
+              border-right: 1px solid rgba(255, 255, 255, 0.05);
+              overflow: hidden;
+              text-overflow: ellipsis;
+
+              &:last-child {
+                border-right: none; // Remove border from last column
+              }
+
+              &.rental-id {
+                font-family: 'Monaco', 'Menlo', monospace;
+                font-weight: 600;
+                color: #667eea;
+                width: 8%;
+              }
+
+              &.film-info {
+                width: 18%;
+                
+                .film-title {
+                  font-weight: 600;
+                  margin-bottom: 0.25rem;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+
+                .film-rate {
+                  font-size: 0.9rem;
+                  color: #a0a0a0;
+                }
+              }
+
+              &.customer-info {
+                width: 15%;
+                
+                .customer-name {
+                  font-weight: 600;
+                  margin-bottom: 0.25rem;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+
+                .customer-email {
+                  font-size: 0.9rem;
+                  color: #a0a0a0;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+              }
+
+              &.rental-date {
+                color: #a0a0a0;
+                width: 12%;
+                font-size: 0.9rem;
+              }
+
+              &.days-rented {
+                font-weight: 600;
+                width: 8%;
+                text-align: center;
+              }
+
+              &.rental-duration {
+                color: #a0a0a0;
+                width: 8%;
+                text-align: center;
+              }
+
+              &.store-info {
+                color: #a0a0a0;
+                width: 8%;
+                text-align: center;
+              }
+
+              &.status {
+                width: 12%;
+                
+                .status-badge {
+                  padding: 0.25rem 0.75rem;
+                  border-radius: 20px;
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  white-space: nowrap;
+
+                  &.active {
+                    background: rgba(46, 213, 115, 0.2);
+                    color: #2ed573;
+                  }
+
+                  &.overdue {
+                    background: rgba(220, 38, 127, 0.2);
+                    color: #dc267f;
+                  }
+
+                  &.returned {
+                    background: rgba(116, 116, 116, 0.2);
+                    color: #747474;
+                  }
+                }
+              }
+
+              &.action {
+                width: 11%;
+                min-width: 120px; // Ensure minimum width for action buttons
+                text-align: center; // Center the buttons
+                
+                .btn-return {
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  border: none;
+                  padding: 0.6rem 1.2rem;
+                  border-radius: 8px;
+                  font-weight: 600;
+                  font-size: 0.9rem;
+                  cursor: pointer;
+                  transition: all 0.2s ease;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 0.5rem;
+                  min-width: 80px;
+                  height: 36px;
+                  
+                  &:hover:not(:disabled) {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                    background: linear-gradient(135deg, #7c8ff0 0%, #8559b8 100%);
+                  }
+
+                  &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    transform: none;
+                  }
+
+                  .spinner {
+                    width: 14px;
+                    height: 14px;
+                    border: 2px solid transparent;
+                    border-top: 2px solid currentColor;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                  }
+                }
+
+                .returned-text {
+                  color: #747474;
+                  font-style: italic;
+                  font-size: 0.9rem;
+                  display: inline-block;
+                  padding: 0.6rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .pagination-nav {
+    margin-top: 2rem;
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      .page-item {
+        margin: 0 0.25rem;
+
+        .page-link {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #ffffff;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        &.active .page-link {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-color: #667eea;
+        }
+
+        &.disabled .page-link {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+
+    &.btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive design
+@media (max-width: 1400px) {
+  .admin-rentals-container {
+    .table-container {
+      .rentals-table {
+        min-width: 1000px; // Reduce minimum width for smaller screens
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .admin-rentals-container {
+    .table-container {
+      .rentals-table {
+        min-width: 900px; // Further reduce for tablet screens
+        
+        thead th, tbody td {
+          padding: 0.75rem; // Reduce padding to save space
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-rentals-container {
+    padding: 1rem;
+
+    .rentals-header h2 {
+      font-size: 2rem;
+    }
+
+    .rentals-summary {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    
+    .table-container {
+      .rentals-table {
+        min-width: 800px; // Minimum width for mobile
+        font-size: 0.85rem;
+        
+        thead th, tbody td {
+          padding: 0.5rem;
+        }
+        
+        // Ensure action column is always visible on mobile
+        tbody td.action {
+          min-width: 100px;
+          
+          .btn-return {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            min-width: 70px;
+            height: 32px;
+          }
+        }
+      }
+    }
+  }
+}

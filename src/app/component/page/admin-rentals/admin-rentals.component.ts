@@ -1,27 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthService } from '../../../service/auth-service.service';
 import { RentalService, ActiveRental, ActiveRentalsResponse, ReturnRentalRequest } from '../../../service/rental.service';
+import { MessageService } from '../../../service/message.service';
 
 @Component({
   selector: 'app-admin-rentals',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './admin-rentals.component.html',
-  styleUrl: './admin-rentals.component.scss',
-  animations: [
-    trigger('slideIn', [
-      transition(':enter', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate('300ms ease-in', style({ transform: 'translateX(0)', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-out', style({ transform: 'translateX(100%)', opacity: 0 }))
-      ])
-    ])
-  ]
+  styleUrl: './admin-rentals.component.scss'
 })
 export class AdminRentalsComponent implements OnInit {
   rentals: ActiveRental[] = [];
@@ -37,12 +26,11 @@ export class AdminRentalsComponent implements OnInit {
 
   // Modal states
   showReturnConfirmModal = false;
-  showSuccessMessage = false;
   selectedRental: ActiveRental | null = null;
-  successMessage = '';
 
   private authService = inject(AuthService);
   private rentalService = inject(RentalService);
+  private messageService = inject(MessageService);
 
   ngOnInit() {
     this.loadAllActiveRentals();
@@ -93,15 +81,13 @@ export class AdminRentalsComponent implements OnInit {
     this.rentalService.returnRental(returnRequest).subscribe({
       next: (response) => {
         console.log('Rental returned successfully:', response);
-        this.successMessage = `Successfully returned "${response.rental.film_title}" for ${response.rental.customer_name}`;
-        this.showSuccessMessage = true;
+        this.messageService.show(
+          `Successfully returned "${response.rental.film_title}" for ${response.rental.customer_name}`,
+          'success',
+          4000
+        );
         this.returningRentalId = null;
         this.selectedRental = null;
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          this.showSuccessMessage = false;
-        }, 5000);
         
         // Refresh the current page to show updated data
         this.loadAllActiveRentals(this.currentPage);
@@ -118,10 +104,6 @@ export class AdminRentalsComponent implements OnInit {
   cancelReturn() {
     this.showReturnConfirmModal = false;
     this.selectedRental = null;
-  }
-
-  closeSuccessMessage() {
-    this.showSuccessMessage = false;
   }
 
   goToPage(page: number) {

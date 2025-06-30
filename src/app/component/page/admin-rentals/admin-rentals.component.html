@@ -151,15 +151,3 @@
     </div>
   </div>
 </div>
-
-<!-- Success Message -->
-<div class="success-popup" *ngIf="showSuccessMessage" [@slideIn]>
-  <div class="success-content">
-    <div class="success-icon">✅</div>
-    <div class="success-text">
-      <h4>Return Successful!</h4>
-      <p>{{ successMessage }}</p>
-    </div>
-    <button class="close-success-btn" (click)="closeSuccessMessage()">✕</button>
-  </div>
-</div>

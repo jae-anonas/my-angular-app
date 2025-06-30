@@ -30,6 +30,10 @@ export class InventoryComponent implements OnInit {
   showAddInventoryModal = false;
   addingInventory = false;
   films: any[] = [];
+  filteredFilms: any[] = [];
+  filmSearchTerm = '';
+  showFilmDropdown = false;
+  selectedFilm: any = null;
   newInventory = {
     film_id: null,
     store_id: null,
@@ -44,14 +48,19 @@ export class InventoryComponent implements OnInit {
   }
 
   loadFilms(): void {
-    // Load films for the add inventory dropdown
-    this.filmService.getFilms(1, 100).subscribe({
+    // Load more films for better search experience
+    this.filmService.getFilms(1, 1500).subscribe({
       next: (response) => {
+        console.log('Films API Response:', response);
         this.films = response.films || [];
+        this.filteredFilms = [...this.films];
+        console.log('Loaded films:', this.films.length);
       },
       error: (error) => {
         console.error('Error loading films:', error);
         this.films = [];
+        this.filteredFilms = [];
+        // You might want to show a user-friendly error message here
       }
     });
   }
@@ -121,6 +130,16 @@ export class InventoryComponent implements OnInit {
       store_id: null,
       quantity: 1
     };
+    // Reset film search
+    this.selectedFilm = null;
+    this.filmSearchTerm = '';
+    this.filteredFilms = [...this.films];
+    this.showFilmDropdown = false;
+    this.addingInventory = false;
+    
+    // Debug: Log the number of films available
+    console.log('Films available for selection:', this.films.length);
+    console.log('Filtered films:', this.filteredFilms.length);
   }
 
   addInventory(): void {
@@ -151,6 +170,67 @@ export class InventoryComponent implements OnInit {
         alert('Failed to add inventory. Please try again.');
       }
     });
+  }
+
+  // Film search methods
+  onFilmSearchInput(): void {
+    const searchTerm = this.filmSearchTerm.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+      this.filteredFilms = [...this.films];
+    } else {
+      this.filteredFilms = this.films.filter(film => 
+        film.title.toLowerCase().includes(searchTerm) ||
+        film.release_year.toString().includes(searchTerm) ||
+        (film.description && film.description.toLowerCase().includes(searchTerm)) ||
+        (film.category && film.category.toLowerCase().includes(searchTerm))
+      );
+    }
+    
+    // Always show dropdown when there are results or when searching
+    this.showFilmDropdown = true;
+  }
+
+  onFilmSearchFocus(): void {
+    this.showFilmDropdown = true;
+    // Always show all films when focused, regardless of search term
+    if (this.filmSearchTerm.trim() === '') {
+      this.filteredFilms = [...this.films];
+    } else {
+      // Re-run the search to ensure filtered results are current
+      this.onFilmSearchInput();
+    }
+  }
+
+  selectFilm(film: any): void {
+    this.selectedFilm = film;
+    this.newInventory.film_id = film.film_id;
+    this.filmSearchTerm = `${film.title} (${film.release_year})`;
+    this.showFilmDropdown = false;
+  }
+
+  clearFilmSelection(): void {
+    this.selectedFilm = null;
+    this.newInventory.film_id = null;
+    this.filmSearchTerm = '';
+    this.filteredFilms = [...this.films];
+    this.showFilmDropdown = false;
+  }
+
+  onFilmDropdownBlur(): void {
+    // Delay hiding dropdown to allow for click events
+    setTimeout(() => {
+      this.showFilmDropdown = false;
+    }, 200);
+  }
+
+  // Add a method to manually trigger dropdown display for debugging
+  toggleFilmDropdown(): void {
+    this.showFilmDropdown = !this.showFilmDropdown;
+    if (this.showFilmDropdown) {
+      this.filteredFilms = [...this.films];
+    }
+    console.log('Dropdown toggled:', this.showFilmDropdown, 'Films available:', this.filteredFilms.length);
   }
 
   private getMockInventoryData(): any[] {

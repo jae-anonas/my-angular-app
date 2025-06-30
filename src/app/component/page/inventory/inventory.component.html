@@ -109,18 +109,54 @@
       <div class="modal-body">
         <form (ngSubmit)="addInventory()" #addInventoryForm="ngForm">
           <div class="form-group">
-            <label for="filmSelect">🎬 Select Film *</label>
-            <select 
-              id="filmSelect" 
-              [(ngModel)]="newInventory.film_id" 
-              name="film_id" 
-              class="form-control" 
-              required>
-              <option value="">Choose a film...</option>
-              <option *ngFor="let film of films" [value]="film.film_id">
-                {{ film.title }} ({{ film.release_year }})
-              </option>
-            </select>
+            <label for="filmSearch">🎬 Select Film *</label>
+            <div class="film-search-container">
+              <input 
+                type="text" 
+                id="filmSearch"
+                [(ngModel)]="filmSearchTerm"
+                (input)="onFilmSearchInput()"
+                (focus)="onFilmSearchFocus()"
+                (click)="onFilmSearchFocus()"
+                (blur)="onFilmDropdownBlur()"
+                name="filmSearch"
+                class="form-control film-search-input"
+                placeholder="Search for a film..."
+                autocomplete="off"
+                required>
+              
+              <button 
+                type="button" 
+                class="clear-film-btn" 
+                *ngIf="selectedFilm"
+                (click)="clearFilmSelection()"
+                title="Clear selection">
+                ✖️
+              </button>
+              
+              <div class="film-dropdown" *ngIf="showFilmDropdown && filteredFilms.length > 0">
+                <div 
+                  class="film-option" 
+                  *ngFor="let film of filteredFilms.slice(0, 50); let i = index"
+                  (click)="selectFilm(film)"
+                  [class.selected]="selectedFilm?.film_id === film.film_id">
+                  <div class="film-title">{{ film.title }}</div>
+                  <div class="film-details">
+                    {{ film.release_year }} 
+                    <span *ngIf="film.rating"> • {{ film.rating }}</span>
+                    <span *ngIf="film.length"> • {{ film.length }} min</span>
+                    <span *ngIf="film.category"> • {{ film.category }}</span>
+                  </div>
+                </div>
+                <div class="dropdown-info" *ngIf="filteredFilms.length > 50">
+                  Showing first 50 results of {{ filteredFilms.length }}. Refine your search for more specific results.
+                </div>
+              </div>
+              
+              <div class="film-dropdown no-results" *ngIf="showFilmDropdown && filteredFilms.length === 0 && filmSearchTerm.trim()">
+                <div class="no-results-text">No films found matching "{{ filmSearchTerm }}"</div>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">

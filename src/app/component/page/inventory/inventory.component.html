@@ -189,12 +189,6 @@
                   (click)="selectFilm(film)"
                   [class.selected]="selectedFilm?.film_id === film.film_id">
                   <div class="film-title">{{ film.title }}</div>
-                  <div class="film-details">
-                    {{ film.release_year }} 
-                    <span *ngIf="film.rating"> • {{ film.rating }}</span>
-                    <span *ngIf="film.length"> • {{ film.length }} min</span>
-                    <span *ngIf="film.category"> • {{ film.category }}</span>
-                  </div>
                 </div>
                 <div class="dropdown-info" *ngIf="filteredFilms.length > 50">
                   Showing first 50 results of {{ filteredFilms.length }}. Refine your search for more specific results.

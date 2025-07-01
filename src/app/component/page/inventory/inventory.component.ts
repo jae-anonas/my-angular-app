@@ -54,19 +54,15 @@ export class InventoryComponent implements OnInit {
   }
 
   loadFilms(): void {
-    // Load more films for better search experience
-    this.filmService.getFilms(1, 1500).subscribe({
+    // Use /api/films/options endpoint for all film options
+    this.filmService.getFilmOptions().subscribe({
       next: (response) => {
-        console.log('Films API Response:', response);
-        this.films = response.films || [];
+        this.films = response || [];
         this.filteredFilms = [...this.films];
-        console.log('Loaded films:', this.films.length);
       },
       error: (error) => {
-        console.error('Error loading films:', error);
         this.films = [];
         this.filteredFilms = [];
-        // You might want to show a user-friendly error message here
       }
     });
   }
@@ -188,20 +184,13 @@ export class InventoryComponent implements OnInit {
   // Film search methods
   onFilmSearchInput(): void {
     const searchTerm = this.filmSearchTerm.trim().toLowerCase();
-    
     if (searchTerm === '') {
       this.filteredFilms = [...this.films];
     } else {
-      this.filteredFilms = this.films.filter(film => 
-        film.title.toLowerCase().includes(searchTerm) ||
-        film.release_year.toString().includes(searchTerm) ||
-        (film.description && film.description.toLowerCase().includes(searchTerm)) ||
-        (film.category && film.category.toLowerCase().includes(searchTerm))
-      );
+      this.filteredFilms = this.films.filter(film => film.title.toLowerCase().includes(searchTerm));
     }
-    
     // Always show dropdown when there are results or when searching
-    this.showFilmDropdown = true;
+    this.showFilmDropdown = this.filteredFilms.length > 0;
   }
 
   onFilmSearchFocus(): void {

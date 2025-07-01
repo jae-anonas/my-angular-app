@@ -50,6 +50,10 @@ export class FilmService {
     return this.http.get<any[]>(API_ENDPOINTS.STORES);
   }
 
+  getFilmOptions() {
+    return this.http.get<any[]>(this.apiUrl + 'options');
+  }
+
   // Inventory endpoints
   getInventoryData(params: {
     film_title?: string;

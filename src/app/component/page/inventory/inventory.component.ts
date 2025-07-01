@@ -40,6 +40,12 @@ export class InventoryComponent implements OnInit {
     quantity: 1
   };
 
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 0;
+  totalResults = 0;
+
   constructor(private filmService: FilmService) {}
 
   ngOnInit(): void {
@@ -65,11 +71,13 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  loadInventoryData(): void {
+  loadInventoryData(page: number = 1): void {
     this.loading = true;
-    
+    this.currentPage = page;
     const params: any = {
-      groupBy: 'film'  // Always group by film
+      groupBy: 'film',
+      page: this.currentPage,
+      pageSize: this.pageSize
     };
     
     if (this.filmTitle.trim()) {
@@ -89,6 +97,9 @@ export class InventoryComponent implements OnInit {
         console.log('Inventory API Response:', response);
         // Handle the actual API response structure
         this.inventoryData = response?.results || [];
+        this.totalResults = response?.total || this.inventoryData.length;
+        this.pageSize = response?.pageSize || this.pageSize;
+        this.totalPages = Math.ceil(this.totalResults / this.pageSize);
         this.loading = false;
         console.log('Processed inventory data:', this.inventoryData);
       },
@@ -97,6 +108,8 @@ export class InventoryComponent implements OnInit {
         console.log('Using mock data for development...');
         // Use mock data for development if API is not available
         this.inventoryData = this.getMockInventoryData();
+        this.totalResults = this.inventoryData.length;
+        this.totalPages = Math.ceil(this.totalResults / this.pageSize);
         this.loading = false;
       }
     });
@@ -231,6 +244,22 @@ export class InventoryComponent implements OnInit {
       this.filteredFilms = [...this.films];
     }
     console.log('Dropdown toggled:', this.showFilmDropdown, 'Films available:', this.filteredFilms.length);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.loadInventoryData(page);
+    }
+  }
+
+  getVisiblePages(): number[] {
+    const pages: number[] = [];
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(this.totalPages, this.currentPage + 2);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   private getMockInventoryData(): any[] {

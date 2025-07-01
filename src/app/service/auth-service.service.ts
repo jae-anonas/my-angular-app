@@ -42,4 +42,9 @@ export class AuthService {
     localStorage.removeItem('userData');
     this.router.navigate(['/login']);
   }
+
+  setUser(userData: any) {
+    localStorage.setItem('userData', JSON.stringify(userData));
+    this.userSubject.next(userData);
+  }
 }

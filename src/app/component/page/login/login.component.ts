@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.loading = false;
-          // Store user data in local storage
-          localStorage.setItem('userData', JSON.stringify(response.userData));
+          this.authService.setUser(response.userData);
           this.messageService.show('Successfully logged in!', 'success');
           this.router.navigate(['/films']);
         }, error: (err: any) => {

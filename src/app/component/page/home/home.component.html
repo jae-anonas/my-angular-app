@@ -6,11 +6,13 @@
       <div class="film-carousel">
         <div class="film-carousel-track">
           <div class="film-carousel-card" *ngFor="let film of category.films">
-            <div class="film-carousel-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
-              <span class="film-carousel-icon">🎬</span>
-            </div>
-            <div class="film-carousel-title">{{ film.title }}</div>
-            <div class="film-carousel-meta">{{ film.release_year }} • {{ film.rating }}</div>
+            <a [routerLink]="['/film', film.film_id]" class="film-link">
+              <div class="film-carousel-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
+                <span class="film-carousel-icon">🎬</span>
+              </div>
+              <div class="film-carousel-title">{{ film.title }}</div>
+              <div class="film-carousel-meta">{{ film.release_year }} • {{ film.rating }}</div>
+            </a>
           </div>
         </div>
       </div>

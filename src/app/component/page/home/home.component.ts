@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilmData, FilmDataByCategoryResponse, FilmDataResponse } from '../../../model/film-data';
 import { FilmService } from '../../../service/film.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.filmService.getFilmsByCategory(["horror","comedy"]).subscribe({
+    this.filmService.getFilmsByCategory(["horror","comedy","documentary","animation","classics"]).subscribe({
       next: (data: FilmDataByCategoryResponse[]) => {
         this.categories = data;
         this.loading = false;

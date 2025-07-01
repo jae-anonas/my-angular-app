@@ -57,4 +57,8 @@ export class UserService {
   updateCustomer(customerData: Partial<CustomerData>): Observable<CustomerResponse> {
     return this.http.put<CustomerResponse>(this.customersAPIUrl + 'edit', customerData);
   }
+
+  deleteUser(customerId: number) {
+    return this.http.delete<any>(this.apiUrl + '/delete/' + customerId);
+  }
 }

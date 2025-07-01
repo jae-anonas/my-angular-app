@@ -109,10 +109,14 @@
         </div>
 
         <div class="form-actions">
-          <div *ngIf="!editMode && isCurrentUser" class="action-buttons">
+          <div *ngIf="!editMode && (isCurrentUser || isAdmin)" class="action-buttons">
             <button type="button" class="btn btn-primary" (click)="enableEdit()">
               <span class="btn-icon">✏️</span>
               Edit Profile
+            </button>
+            <button *ngIf="isAdmin" type="button" class="btn btn-danger" (click)="confirmDeleteUser()" style="margin-left: 1rem;">
+              <span class="btn-icon">🗑️</span>
+              Delete
             </button>
           </div>
 
@@ -128,11 +132,26 @@
             </button>
           </div>
 
-          <div *ngIf="!isCurrentUser" class="readonly-notice">
+          <div *ngIf="!isCurrentUser && !isAdmin" class="readonly-notice">
             <p>You can only edit your own profile.</p>
           </div>
         </div>
       </form>
+    </div>
+
+    <div *ngIf="showDeleteConfirm" class="delete-confirm-modal modal-overlay">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Confirm Delete</h3>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this user account? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelDeleteUser()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

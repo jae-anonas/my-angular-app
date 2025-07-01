@@ -24,6 +24,10 @@ export class ProfileComponent implements OnInit {
   editMode = false;
   editedCustomer: Partial<CustomerData> = {};
   isCurrentUser = false;
+  isAdmin = false;
+  deleteSuccess = false;
+  deleteError = '';
+  showDeleteConfirm = false;
 
   userService = inject(UserService);
   messageService = inject(MessageService);
@@ -36,6 +40,7 @@ export class ProfileComponent implements OnInit {
     
     // Check if viewing own profile
     this.isCurrentUser = currentUser && currentUser.id?.toString() === userId;
+    this.isAdmin = currentUser && currentUser.role === 'admin';
     
     if (userId) {
       this.loading = true;
@@ -88,7 +93,8 @@ export class ProfileComponent implements OnInit {
   }
 
   enableEdit() {
-    if (!this.isCurrentUser) {
+    // Allow admin to edit any profile, or user to edit their own
+    if (!this.isCurrentUser && !this.isAdmin) {
       this.messageService.show('You can only edit your own profile', 'error');
       return;
     }
@@ -102,7 +108,8 @@ export class ProfileComponent implements OnInit {
   }
 
   saveProfile() {
-    if (!this.isCurrentUser) {
+    // Allow admin to save any profile, or user to save their own
+    if (!this.isCurrentUser && !this.isAdmin) {
       this.messageService.show('You can only edit your own profile', 'error');
       return;
     }
@@ -153,6 +160,35 @@ export class ProfileComponent implements OnInit {
         const errorMessage = error?.error?.message || 'Failed to update profile';
         this.messageService.show(errorMessage, 'error');
         console.error('Profile update error:', error);
+      }
+    });
+  }
+
+  confirmDeleteUser() {
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteUser() {
+    this.showDeleteConfirm = false;
+  }
+
+  deleteUser() {
+    if (!this.customerData?.customer_id) return;
+    this.userService.deleteUser(this.user.id).subscribe({
+      next: () => {
+        this.deleteSuccess = true;
+        this.deleteError = '';
+        this.showDeleteConfirm = false;
+        this.messageService.show('User deleted successfully.', 'success');
+        setTimeout(() => {
+          this.router.navigate(['/user-list']);
+        }, 1200);
+      },
+      error: (err) => {
+        this.deleteError = 'Failed to delete user.';
+        this.deleteSuccess = false;
+        this.showDeleteConfirm = false;
+        this.messageService.show('Failed to delete user.', 'error');
       }
     });
   }

@@ -1,8 +1,8 @@
 <nav class="main-navbar minimal-navbar">
   <div class="navbar-content">
     <div class="navbar-logo">
-      <span>🌙</span>
-      <span class="navbar-title">MyApp</span>
+      <span><img src="assets/images/vhs-icon.ico" alt="VHS Logo" style="height: 28px; vertical-align: middle;" /></span>
+      <span class="navbar-title">VHS Rental Online</span>
     </div>
     <ul class="navbar-links navbar-links-left">
       <li *ngIf="!isAdmin"><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
@@ -19,7 +19,7 @@
         <span class="customer-name">{{ customerInfo.first_name }} {{ customerInfo.last_name }}</span>
       </div>
       
-      <a class="navbar-cart" routerLink="/cart" title="View Cart">
+      <a class="navbar-cart" routerLink="/cart" title="View Cart" *ngIf="!isAdmin">
         <span class="cart-icon">🛒</span>
         <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>

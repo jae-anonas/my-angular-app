@@ -4,6 +4,7 @@ import { FilmData, FilmDataResponse } from '../../model/film-data';
 import { FilmService } from '../../service/film.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../service/auth-service.service';
 
 @Component({
   selector: 'app-film-list',
@@ -19,6 +20,7 @@ export class FilmListComponent implements OnInit {
   totalPages = 1;
   loading = false;
   searchTerm = '';
+  isAdmin = false;
 
   gradients = [
     'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
@@ -33,10 +35,19 @@ export class FilmListComponent implements OnInit {
     'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
   ];
 
-  constructor(private filmService: FilmService) {}
+  constructor(private filmService: FilmService, private authService: AuthService) {}
 
   ngOnInit() {
+    this.checkUserRole();
     this.loadFilms();
+  }
+
+  checkUserRole() {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.isAdmin = user.role === 'admin';
+    }
   }
 
   loadFilms(page: number = 1, search: string = '') {

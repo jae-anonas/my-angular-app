@@ -1,10 +1,13 @@
 <div class="home-container">
   <div *ngIf="loading" class="home-loading">Loading films...</div>
   <ng-container *ngIf="!loading">
-    <div *ngFor="let category of categories" class="category-section">
+    <div *ngFor="let category of categories; let i = index" class="category-section">
       <div class="category-title">{{ category.category }}</div>
-      <div class="film-carousel">
-        <div class="film-carousel-track">
+      <div class="film-carousel position-relative">
+        <button class="carousel-arrow left" (click)="scrollCarousel(i, -1)" [disabled]="carouselAtStart[i]">
+          &#10094;
+        </button>
+        <div class="film-carousel-track" #carouselTrack>
           <div class="film-carousel-card" *ngFor="let film of category.films">
             <a [routerLink]="['/film', film.film_id]" class="film-link">
               <div class="film-carousel-image" [ngStyle]="{'background': getRandomGradient(film.film_id)}">
@@ -15,6 +18,9 @@
             </a>
           </div>
         </div>
+        <button class="carousel-arrow right" (click)="scrollCarousel(i, 1)" [disabled]="carouselAtEnd[i]">
+          &#10095;
+        </button>
       </div>
     </div>
   </ng-container>

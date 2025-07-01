@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilmData, FilmDataByCategoryResponse, FilmDataResponse } from '../../../model/film-data';
 import { FilmService } from '../../../service/film.service';
@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   categories: FilmDataByCategoryResponse[] = [];
   loading = false;
   gradients = [
@@ -27,6 +27,10 @@ export class HomeComponent implements OnInit {
     'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
   ];
 
+  @ViewChildren('carouselTrack') carouselTracks!: QueryList<ElementRef>;
+  carouselAtStart: boolean[] = [];
+  carouselAtEnd: boolean[] = [];
+
   constructor(private filmService: FilmService) {}
 
   ngOnInit() {
@@ -40,6 +44,30 @@ export class HomeComponent implements OnInit {
         this.categories = [];
         this.loading = false;
       }
+    });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.updateCarouselArrows(), 0);
+    this.carouselTracks.changes.subscribe(() => this.updateCarouselArrows());
+  }
+
+  scrollCarousel(index: number, direction: number) {
+    const track = this.carouselTracks.toArray()[index]?.nativeElement;
+    if (!track) return;
+    const card = track.querySelector('.film-carousel-card');
+    const scrollAmount = card ? card.offsetWidth * 3 : 540;
+    track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    setTimeout(() => this.updateCarouselArrows(), 350);
+  }
+
+  updateCarouselArrows() {
+    this.carouselAtStart = [];
+    this.carouselAtEnd = [];
+    this.carouselTracks.forEach((trackRef, i) => {
+      const track = trackRef.nativeElement;
+      this.carouselAtStart[i] = track.scrollLeft <= 5;
+      this.carouselAtEnd[i] = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 5;
     });
   }
 

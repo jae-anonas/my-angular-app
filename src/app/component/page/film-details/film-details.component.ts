@@ -37,6 +37,11 @@ export class FilmDetailsComponent implements OnInit {
   loadingAvailability = false;
   isAvailableInUserStore = false;
   
+  // Delete state
+  deleteSuccess = false;
+  deleteError = '';
+  showDeleteConfirm = false;
+  
   private route = inject(ActivatedRoute);
   private filmService = inject(FilmService);
   private cartService = inject(CartService);
@@ -215,5 +220,32 @@ export class FilmDetailsComponent implements OnInit {
       return 'No categories';
     }
     return this.film.categories.map(cat => cat.name).join(', ');
+  }
+
+  confirmDeleteFilm() {
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteFilm() {
+    this.showDeleteConfirm = false;
+  }
+
+  deleteFilm() {
+    if (!this.film) return;
+    this.filmService.deleteFilm(this.film.film_id).subscribe({
+      next: () => {
+        this.deleteSuccess = true;
+        this.deleteError = '';
+        this.showDeleteConfirm = false;
+        setTimeout(() => {
+          window.location.href = '/films';
+        }, 1200);
+      },
+      error: (err) => {
+        this.deleteError = 'Failed to delete film.';
+        this.deleteSuccess = false;
+        this.showDeleteConfirm = false;
+      }
+    });
   }
 }

@@ -38,6 +38,10 @@ export class FilmService {
     return this.http.put(this.apiUrl + 'edit', film);
   }
 
+  deleteFilm(filmId: number) {
+    return this.http.delete<any>(this.apiUrl + 'delete/' + filmId);
+  }
+
   getCategoryOptions() {
     return this.http.get<any[]>(API_ENDPOINTS.CATEGORIES);
   }

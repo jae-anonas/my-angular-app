@@ -226,10 +226,10 @@
           border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           white-space: nowrap;
           
-          &:first-child { width: 20%; }
-          &:nth-child(2) { width: 8%; }
-          &:nth-child(3) { width: 8%; }
-          &:nth-child(4) { width: 30%; }
+          &:first-child { width: auto !important; min-width: 140px !important; max-width: none !important; }
+          &:nth-child(2) { width: 110px !important; min-width: 90px !important; max-width: 140px !important; text-align: center; white-space: nowrap; }
+          &:nth-child(3) { width: 140px !important; min-width: 110px !important; max-width: 180px !important; text-align: center; white-space: nowrap; }
+          &:nth-child(4) { width: 60px !important; min-width: 50px !important; max-width: 80px !important; text-align: center; }
           &:nth-child(5) { width: 10%; }
           &:nth-child(6) { width: 8%; }
           &:nth-child(7) { width: 16%; }
@@ -693,6 +693,36 @@
   }
 }
 
+.collapse-btn {
+  background: none;
+  border: none;
+  color: #a1a7ff;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  vertical-align: middle;
+  transition: color 0.15s;
+}
+.collapse-btn:hover {
+  color: #fff;
+}
+.film-header-row {
+  background: #232946;
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+.film-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1.1rem;
+  padding-bottom: 0.5rem;
+}
+.inventory-row td:first-child {
+  border: none;
+}
+
 @media (max-width: 1200px) {
   .inventory-container {
     .table-container {
@@ -751,6 +781,30 @@
       }
     }
   }
+}
+
+.delete-inventory-btn {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.75rem;
+  cursor: pointer;
+  outline: none;
+  vertical-align: middle;
+  transition: color 0.15s;
+}
+.delete-inventory-btn:hover {
+  color: #ff2222;
+}
+
+// Ensure the delete button cell is centered and has enough space
+.inventory-table td:last-child {
+  text-align: center;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 @keyframes spin {

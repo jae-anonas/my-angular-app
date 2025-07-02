@@ -59,54 +59,64 @@
   <!-- Inventory Results Table -->
   <div *ngIf="!loading && inventoryData.length > 0" class="inventory-results">
     <div class="results-header">
-      <h3>📋 Inventory Results ({{ inventoryData.length }} films)</h3>
+      <h3>📋 Inventory Details ({{ inventoryData.length }} films)</h3>
     </div>
-
     <div class="table-container">
       <table class="inventory-table">
         <thead>
           <tr>
             <th>Film Title</th>
-            <th>Year</th>
-            <th>Rating</th>
-            <th>Description</th>
-            <th>Total Copies</th>
-            <th>Stores</th>
-            <th>Store Distribution</th>
+            <th>Inventory ID</th>
+            <th>Store</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of inventoryData">
-            <td class="film-title">
-              <div class="title-cell">
-                🎬 {{ item.film?.title || item.film_title }}
-              </div>
-            </td>
-            <td class="film-year">{{ item.film?.release_year || item.release_year }}</td>
-            <td class="film-rating">
-              <span class="rating-badge">{{ item.film?.rating || item.rating }}</span>
-            </td>
-            <td class="film-description">
-              <div class="description-text">{{ (item.film?.description || item.description) | slice:0:100 }}{{ (item.film?.description || item.description)?.length > 100 ? '...' : '' }}</div>
-            </td>
-            <td class="total-copies">
-              <span class="copies-count">{{ item.total_inventory_count || item.total_copies }}</span>
-            </td>
-            <td class="stores-count">{{ item.stores_count }}</td>
-            <td class="store-distribution">
-              <div *ngIf="item.stores && item.stores.length > 0" class="store-breakdown">
-                <div *ngFor="let store of item.stores" class="store-item">
-                  <span class="store-name">{{ store.store_name }}:</span>
-                  <span class="store-count">{{ store.count }}</span>
-                </div>
-              </div>
-              <div *ngIf="!item.stores || item.stores.length === 0" class="no-stores">
-                No store data
-              </div>
-            </td>
-          </tr>
+          <ng-container *ngFor="let film of inventoryData">
+            <tr class="film-header-row">
+              <td colspan="4" class="film-title-cell">
+                <button class="collapse-btn" (click)="toggleCollapse(film)">
+                  <span *ngIf="isCollapsed(film)">▶</span>
+                  <span *ngIf="!isCollapsed(film)">▼</span>
+                </button>
+                {{ film.film?.title || film.film_title }}
+              </td>
+            </tr>
+            <ng-container *ngIf="!isCollapsed(film)">
+              <ng-container *ngFor="let store of film.inventory_by_store">
+                <ng-container *ngFor="let inv of store.inventories">
+                  <tr class="inventory-row">
+                    <td></td>
+                    <td>{{ inv.inventory_id }}</td>
+                    <td>{{ store.store_id }}</td>
+                    <td>
+                      <button class="delete-inventory-btn" title="Delete Inventory" (click)="deleteInventoryRow(inv.inventory_id)">
+                        <span aria-label="Delete" style="font-size:1.2em;line-height:1;">&#10005;</span>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
         </tbody>
       </table>
+    </div>
+
+    <!-- Delete Inventory Confirmation Modal -->
+    <div *ngIf="showDeleteConfirm" class="delete-confirm-modal modal-overlay" (click)="cancelDeleteInventory()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Confirm Delete</h3>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this inventory item? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelDeleteInventory()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="deleteInventoryRowConfirmed()">Delete</button>
+        </div>
+      </div>
     </div>
 
     <!-- Pagination -->

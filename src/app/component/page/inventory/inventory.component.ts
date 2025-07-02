@@ -46,6 +46,13 @@ export class InventoryComponent implements OnInit {
   totalPages = 0;
   totalResults = 0;
 
+  // Collapsible state for each film
+  collapsedFilms: { [filmId: string]: boolean } = {};
+
+  // Modal state for delete confirmation
+  showDeleteConfirm = false;
+  pendingDeleteInventoryId: number | null = null;
+
   constructor(private filmService: FilmService) {}
 
   ngOnInit(): void {
@@ -235,6 +242,16 @@ export class InventoryComponent implements OnInit {
     console.log('Dropdown toggled:', this.showFilmDropdown, 'Films available:', this.filteredFilms.length);
   }
 
+  toggleCollapse(film: any) {
+    const id = film.film?.film_id || film.film_id;
+    this.collapsedFilms[id] = !this.collapsedFilms[id];
+  }
+
+  isCollapsed(film: any): boolean {
+    const id = film.film?.film_id || film.film_id;
+    return !!this.collapsedFilms[id];
+  }
+
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.loadInventoryData(page);
@@ -249,6 +266,45 @@ export class InventoryComponent implements OnInit {
       pages.push(i);
     }
     return pages;
+  }
+
+  // Utility for template: get total inventory rows for a film
+  getInventoryRowspan(film: any): number {
+    if (!film || !film.inventory_by_store) return 1;
+    return film.inventory_by_store.reduce((sum: number, store: any) => sum + (store.inventories?.length || 0), 0);
+  }
+
+  // Delete inventory row by inventory_id (open modal)
+  deleteInventoryRow(inventoryId: number) {
+    this.confirmDeleteInventory(inventoryId);
+  }
+
+  // Delete inventory row by inventory_id (with modal)
+  confirmDeleteInventory(inventoryId: number) {
+    this.pendingDeleteInventoryId = inventoryId;
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteInventory() {
+    this.showDeleteConfirm = false;
+    this.pendingDeleteInventoryId = null;
+  }
+
+  deleteInventoryRowConfirmed() {
+    if (!this.pendingDeleteInventoryId) return;
+    this.filmService.deleteInventoryById(this.pendingDeleteInventoryId).subscribe({
+      next: () => {
+        this.loadInventoryData();
+        this.showDeleteConfirm = false;
+        this.pendingDeleteInventoryId = null;
+      },
+      error: (err) => {
+        alert('Failed to delete inventory item.');
+        this.showDeleteConfirm = false;
+        this.pendingDeleteInventoryId = null;
+        console.error(err);
+      }
+    });
   }
 
   private getMockInventoryData(): any[] {

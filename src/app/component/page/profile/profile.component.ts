@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   loading = false;
   editMode = false;
   editedCustomer: Partial<CustomerData> = {};
+  editedRole: string = '';
   isCurrentUser = false;
   isAdmin = false;
   deleteSuccess = false;
@@ -76,14 +77,15 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         this.customerData = response.customer;
         this.editedCustomer = { ...this.customerData };
+        this.editedRole = this.user?.role || 'customer';
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading customer data:', error);
-        // Fallback to user.customer data if available
         if (this.user.customer) {
           this.customerData = this.user.customer;
           this.editedCustomer = { ...this.customerData };
+          this.editedRole = this.user?.role || 'customer';
         } else {
           this.customerData = null;
         }
@@ -93,13 +95,13 @@ export class ProfileComponent implements OnInit {
   }
 
   enableEdit() {
-    // Allow admin to edit any profile, or user to edit their own
     if (!this.isCurrentUser && !this.isAdmin) {
       this.messageService.show('You can only edit your own profile', 'error');
       return;
     }
     this.editMode = true;
     this.editedCustomer = { ...this.customerData };
+    this.editedRole = this.user?.role || 'customer';
   }
 
   cancelEdit() {
@@ -127,8 +129,6 @@ export class ProfileComponent implements OnInit {
     }
 
     this.loading = true;
-    
-    // Update customer data directly using the new updateCustomer method
     const updateData = {
       customer_id: this.customerData?.customer_id,
       first_name: this.editedCustomer.first_name,
@@ -136,11 +136,16 @@ export class ProfileComponent implements OnInit {
       email: this.editedCustomer.email
     };
 
+    // If admin and role changed, update user role as well
+    if (this.isAdmin && this.user && this.editedRole && this.editedRole !== this.user.role) {
+      this.userService.saveUserEdits({ id: this.user.id, role: this.editedRole }).subscribe();
+    }
+
     this.userService.updateCustomer(updateData).subscribe({
       next: (response) => {
-        // Update local data with response
         this.customerData = response.customer;
         this.editedCustomer = { ...this.customerData };
+        if (this.user) this.user.role = this.editedRole;
         
         // Update auth service user data
         const currentUser = this.authService.userValue;
